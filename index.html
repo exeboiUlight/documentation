@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>Ulight game engine</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Заголовок страницы</title>
-    <link rel="icon", href="light.ico", type="image/x=icon">
+    <title>Ulight game engine</title>
+    <link rel="icon" href="light.ico" type="image/x-icon" />
 
     <style>
         * {
@@ -14,39 +13,24 @@
             box-sizing: border-box;
         }
 
-        /* Общий стиль для серой темы */
         body {
-            background-color: #a9a9a9; /* тёмно-серый фон */
-            color: #222; /* тёмно-серый или почти чёрный цвет текста */
+            background-color: #a9a9a9;
+            color: #222;
             font-family: Arial, sans-serif;
             margin: 20px;
         }
 
         a {
-            color: #333; /* цвет ссылок */
+            color: #333;
             text-decoration: underline;
         }
 
-        .test {
-            background-color: rgb(184, 184, 184); /* светло-серый фон для шапки */
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: block;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         a:hover {
-            color: #000; /* при наведении чуть темнее */
-        }
-
-        h1 {
-            color: #222; /* цвет заголовка */
+            color: #000;
         }
 
         header {
-            background-color: #d3d3d3; /* светло-серый фон для шапки */
+            background-color: #d3d3d3;
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
@@ -54,6 +38,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .sheach-bar {
             display: flex;
             align-items: center;
@@ -72,61 +57,104 @@
             background-color: #a3a3a3;
         }
 
-        header a:active {
-            background-color: #9a9a9a;
-
+        /* Стили для секции аккаунтов */
+        #auth-section {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
 
-        /* Стили для горизонтальной прокрутки скриншотов */
+        #auth-section h2 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Форма */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-form input {
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .auth-form button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #b3b3b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .auth-form button:hover {
+            background-color: #a3a3a3;
+        }
+
+        /* Стиль для профиля */
+        #profile {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        #profile h2 {
+            margin-bottom: 10px;
+        }
+
+        /* Остальной стиль */
+        h4 {
+            margin-bottom: 10px;
+        }
+
+        /* Скриншоты */
         .screenshots-container {
-            display: flex; /* Используем Flexbox для горизонтального расположения */
-            overflow-x: auto; /* Включаем горизонтальную прокрутку при необходимости */
-            padding-bottom: 15px; /* Добавляем отступ снизу, чтобы скроллбар не перекрывал изображения */
-            gap: 15px; /* Расстояние между скриншотами */
-            scrollbar-width: thin; /* Стилизация скроллбара для Firefox */
-            scrollbar-color: #888 #f1f1f1; /* Цвет скроллбара и его трека для Firefox */
-            border-radius: 5px; /* Слегка закругляем углы контейнера */
-            background-color: #f1f1f1; /* Легкий фон для контейнера */
-            padding: 15px; /* Внутренние отступы */
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            gap: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            padding: 15px;
         }
 
-        /* Стилизация скроллбара для Webkit-браузеров (Chrome, Safari) */
         .screenshots-container::-webkit-scrollbar {
-            height: 10px; /* Высота скроллбара */
+            height: 10px;
         }
 
         .screenshots-container::-webkit-scrollbar-track {
-            background: #f1f1f1; /* Фон трека скроллбара */
+            background: #f1f1f1;
             border-radius: 10px;
         }
 
         .screenshots-container::-webkit-scrollbar-thumb {
-            background: #888; /* Цвет ползунка скроллбара */
+            background: #888;
             border-radius: 10px;
         }
 
-        .screenshots-container::-webkit-scrollbar-thumb:hover {
-            background: #555; /* Цвет ползунка при наведении */
-        }
-
-
         .screenshots-container img {
-            flex-shrink: 0; /* Запрещаем изображениям сжиматься */
-            width: 800px; /* Устанавливаем фиксированную ширину для скриншотов */
-            height: auto; /* Высота будет подстраиваться автоматически */
-            border-radius: 5px; /* Слегка закругляем углы изображений */
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Добавляем легкую тень */
-            transition: transform 0.3s ease; /* Плавный переход при наведении */
+            flex-shrink: 0;
+            width: 800px;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
         }
 
         .screenshots-container img:hover {
-            transform: scale(1.02); /* Увеличиваем изображение при наведении */
+            transform: scale(1.02);
         }
-
-        h4 {
-            margin-bottom: 10px; /* Отступ после заголовка "Скриншоты" */
-        }
-
     </style>
 </head>
 <body>
@@ -135,8 +163,6 @@
         <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Скачать</a>
         <a href="https://vk.com/club230211963?from=groups" target="_blank">VK</a>
         <a href="https://t.me/Ulight_studio" target="_blank">Telegram</a>
-
-
         <div class="language-selector">
             <select>
                 <option value="ru">Русский</option>
@@ -144,20 +170,138 @@
             </select>
         </div>
     </header>
+
+    <!-- Блок для системы аккаунтов -->
+    <section id="auth-section">
+        <h2>Войти или зарегистрироваться</h2>
+        <div id="auth-forms">
+            <!-- Форма входа -->
+            <div id="login-form">
+                <h3>Вход</h3>
+                <input type="text" id="login-username" placeholder="Имя пользователя" />
+                <input type="password" id="login-password" placeholder="Пароль" />
+                <button onclick="login()">Войти</button>
+            </div>
+            <hr>
+            <!-- Форма регистрации -->
+            <div id="register-form">
+                <h3>Регистрация</h3>
+                <input type="text" id="register-username" placeholder="Имя пользователя" />
+                <input type="password" id="register-password" placeholder="Пароль" />
+                <button onclick="register()">Зарегистрироваться</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок профиля для отображения после входа -->
+    <div id="profile">
+        <h2>Добро пожаловать, <span id="user-name"></span>!</h2>
+        <button onclick="logout()">Выйти</button>
+    </div>
+
     <main>
         <h4>Скриншоты:</h4>
         <div class="screenshots-container">
-            <img src="1.PNG" alt="Скриншот 1">
-            <img src="2.png" alt="Скриншот 2">
-            <img src="3.png" alt="Скриншот 3">
-            <!-- Добавьте здесь остальные ваши скриншоты -->
+            <img src="1.PNG" alt="Скриншот 1" />
+            <img src="2.png" alt="Скриншот 2" />
+            <img src="3.png" alt="Скриншот 3" />
         </div>
     </main>
     <text class="test">
         <h1>Немного о нас:</h1>
         <h3>Наша команда разработчиков заботится о качестве нашего продукта.</h3>
         <h3>Мы всегда занимаемся улучшением движка.</h3>
-        <h3>Для связи с нами сожете использовать <a href="https://t.me/+mzgwKqFTuhNjZDBi">наш чат в тг</a>.</h3>
+        <h3>Для связи с нами можете использовать <a href="https://t.me/+mzgwKqFTuhNjZDBi">наш чат в тг</a>.</h3>
     </text>
+
+    <script>
+        // Получаем элементы
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const profileDiv = document.getElementById('profile');
+        const userNameSpan = document.getElementById('user-name');
+
+        // Проверяем есть ли вошедший пользователь при загрузке
+        window.onload = () => {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showProfile(currentUser);
+            } else {
+                showAuthForms();
+            }
+        };
+
+        function showAuthForms() {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'block';
+            profileDiv.style.display = 'none';
+        }
+
+        function showProfile(username) {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            profileDiv.style.display = 'block';
+            userNameSpan.textContent = username;
+        }
+
+        function register() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+
+            if (!username || !password) {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || {};
+
+            if (users[username]) {
+                alert('Это имя пользователя уже занято.');
+                return;
+            }
+
+            // "Хешируем" пароль с помощью base64 (для учебных целей)
+            const hashedPassword = btoa(password);
+
+            // сохраняем пользователя
+            users[username] = { password: hashedPassword };
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Регистрация прошла успешно! Теперь вы можете войти.');
+            // Очищаем поля
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            if (!username || !password) {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || {};
+
+            if (users[username]) {
+                const hashedPassword = users[username].password;
+                // сравниваем хеши
+                if (hashedPassword === btoa(password)) {
+                    // успешный вход
+                    localStorage.setItem('currentUser', username);
+                    showProfile(username);
+                } else {
+                    alert('Неверное имя пользователя или пароль.');
+                }
+            } else {
+                alert('Пользователь не найден.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            showAuthForms();
+        }
+    </script>
 </body>
 </html>
