@@ -160,7 +160,7 @@
 <body>
     <header>
         <a href="index.html"><h1>Ulight engine</h1></a>
-        <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Скачать</a>
+        <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Download</a>
         <a href="https://vk.com/club230211963?from=groups" target="_blank">VK</a>
         <a href="https://t.me/Ulight_studio" target="_blank">Telegram</a>
         <div class="language-selector">
@@ -173,45 +173,45 @@
 
     <!-- Блок для системы аккаунтов -->
     <section id="auth-section">
-        <h2>Войти или зарегистрироваться</h2>
+        <h2>Login or Register</h2>
         <div id="auth-forms">
             <!-- Форма входа -->
             <div id="login-form">
-                <h3>Вход</h3>
-                <input type="text" id="login-username" placeholder="Имя пользователя" />
-                <input type="password" id="login-password" placeholder="Пароль" />
-                <button onclick="login()">Войти</button>
+                <h3>Login</h3>
+                <input type="text" id="login-username" placeholder="Username" />
+                <input type="password" id="login-password" placeholder="Password" />
+                <button onclick="login()">Login</button>
             </div>
             <hr>
             <!-- Форма регистрации -->
             <div id="register-form">
-                <h3>Регистрация</h3>
-                <input type="text" id="register-username" placeholder="Имя пользователя" />
-                <input type="password" id="register-password" placeholder="Пароль" />
-                <button onclick="register()">Зарегистрироваться</button>
+                <h3>Register</h3>
+                <input type="text" id="register-username" placeholder="Username" />
+                <input type="password" id="register-password" placeholder="Password" />
+                <button onclick="register()">Register</button>
             </div>
         </div>
     </section>
 
     <!-- Блок профиля для отображения после входа -->
     <div id="profile">
-        <h2>Добро пожаловать, <span id="user-name"></span>!</h2>
-        <button onclick="logout()">Выйти</button>
+        <h2>Welcome, <span id="user-name"></span>!</h2>
+        <button onclick="logout()">Logout</button>
     </div>
 
     <main>
-        <h4>Скриншоты:</h4>
+        <h4>Screenshots:</h4>
         <div class="screenshots-container">
-            <img src="1.PNG" alt="Скриншот 1" />
-            <img src="2.png" alt="Скриншот 2" />
-            <img src="3.png" alt="Скриншот 3" />
+            <img src="1.PNG" alt="Screenshot 1" />
+            <img src="2.png" alt="Screenshot 2" />
+            <img src="3.png" alt="Screenshot 3" />
         </div>
     </main>
     <text class="test">
-        <h1>Немного о нас:</h1>
-        <h3>Наша команда разработчиков заботится о качестве нашего продукта.</h3>
-        <h3>Мы всегда занимаемся улучшением движка.</h3>
-        <h3>Для связи с нами можете использовать <a href="https://t.me/+mzgwKqFTuhNjZDBi">наш чат в тг</a>.</h3>
+        <h1>About us:</h1>
+        <h3>Our development team cares about the quality of our product.</h3>
+        <h3>We are always improving the engine.</h3>
+        <h3>To contact us, you can use <a href="https://t.me/+mzgwKqFTuhNjZDBi">our Telegram chat</a>.</h3>
     </text>
 
     <script>
@@ -220,6 +220,7 @@
         const registerForm = document.getElementById('register-form');
         const profileDiv = document.getElementById('profile');
         const userNameSpan = document.getElementById('user-name');
+        const authSection = document.getElementById('auth-section');
 
         // Проверяем есть ли вошедший пользователь при загрузке
         window.onload = () => {
@@ -241,6 +242,7 @@
             loginForm.style.display = 'none';
             registerForm.style.display = 'none';
             profileDiv.style.display = 'block';
+            authSection.style.display = 'none'; // скрываем блок входа/регистрации
             userNameSpan.textContent = username;
         }
 
@@ -249,25 +251,25 @@
             const password = document.getElementById('register-password').value.trim();
 
             if (!username || !password) {
-                alert('Пожалуйста, заполните все поля.');
+                alert('Please fill in all fields.');
                 return;
             }
 
             let users = JSON.parse(localStorage.getItem('users')) || {};
 
             if (users[username]) {
-                alert('Это имя пользователя уже занято.');
+                alert('This username is already taken.');
                 return;
             }
 
-            // "Хешируем" пароль с помощью base64 (для учебных целей)
+            // "Hash" password using base64 (for educational purposes)
             const hashedPassword = btoa(password);
 
-            // сохраняем пользователя
+            // Save user
             users[username] = { password: hashedPassword };
             localStorage.setItem('users', JSON.stringify(users));
-            alert('Регистрация прошла успешно! Теперь вы можете войти.');
-            // Очищаем поля
+            alert('Registration successful! You can now log in.');
+            // Clear fields
             document.getElementById('register-username').value = '';
             document.getElementById('register-password').value = '';
         }
@@ -277,7 +279,7 @@
             const password = document.getElementById('login-password').value.trim();
 
             if (!username || !password) {
-                alert('Пожалуйста, заполните все поля.');
+                alert('Please fill in all fields.');
                 return;
             }
 
@@ -285,22 +287,24 @@
 
             if (users[username]) {
                 const hashedPassword = users[username].password;
-                // сравниваем хеши
+                // Compare hashes
                 if (hashedPassword === btoa(password)) {
-                    // успешный вход
+                    // Successful login
                     localStorage.setItem('currentUser', username);
                     showProfile(username);
                 } else {
-                    alert('Неверное имя пользователя или пароль.');
+                    alert('Incorrect username or password.');
                 }
             } else {
-                alert('Пользователь не найден.');
+                alert('User not found.');
             }
         }
 
         function logout() {
             localStorage.removeItem('currentUser');
             showAuthForms();
+            // Показываем блок входа/регистрации снова
+            authSection.style.display = 'block';
         }
     </script>
 </body>
