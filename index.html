@@ -1,311 +1,390 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ulight game engine</title>
-    <link rel="icon" href="light.ico" type="image/x-icon" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ulight game engine</title>
+<link rel="icon" href="light.ico" type="image/x-icon" />
 
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            background-color: #a9a9a9;
-            color: #222;
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
+    body {
+        background-color: #a9a9a9;
+        color: #222;
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
 
-        a {
-            color: #333;
-            text-decoration: underline;
-        }
+    a {
+        color: #333;
+        text-decoration: underline;
+    }
 
-        a:hover {
-            color: #000;
-        }
+    a:hover {
+        color: #000;
+    }
 
-        header {
-            background-color: #d3d3d3;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    header {
+        background-color: #d3d3d3;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .sheach-bar {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-        }
+    .sheach-bar {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
 
-        header a {
-            padding: 5px 7px;
-            text-decoration: none;
-            background-color: #b3b3b3;
-            border-radius: 7px;
-        }
+    header a {
+        padding: 5px 7px;
+        text-decoration: none;
+        background-color: #b3b3b3;
+        border-radius: 7px;
+    }
 
-        header a:hover {
-            transition: 250ms;
-            background-color: #a3a3a3;
-        }
+    header a:hover {
+        transition: 250ms;
+        background-color: #a3a3a3;
+    }
 
-        /* Стили для секции аккаунтов */
-        #auth-section {
-            background-color: #f1f1f1;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
+    /* Стили для секции аккаунтов */
+    #auth-section {
+        background-color: #f1f1f1;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
 
-        #auth-section h2 {
-            margin-bottom: 15px;
-            text-align: center;
-        }
+    #auth-section h2 {
+        margin-bottom: 15px;
+        text-align: center;
+    }
 
-        /* Форма */
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-        }
+    /* Форма */
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+    }
 
-        .auth-form input {
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+    .auth-form input {
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
 
-        .auth-form button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #b3b3b3;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    .auth-form button {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #b3b3b3;
+        cursor: pointer;
+        font-weight: bold;
+    }
 
-        .auth-form button:hover {
-            background-color: #a3a3a3;
-        }
+    .auth-form button:hover {
+        background-color: #a3a3a3;
+    }
 
-        /* Стиль для профиля */
-        #profile {
-            display: none;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin-bottom: 20px;
-        }
+    /* Стиль для профиля */
+    #profile {
+        display: none;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
 
-        #profile h2 {
-            margin-bottom: 10px;
-        }
+    #profile h2 {
+        margin-bottom: 10px;
+    }
 
-        /* Остальной стиль */
-        h4 {
-            margin-bottom: 10px;
-        }
+    /* Остальной стиль */
+    h4 {
+        margin-bottom: 10px;
+    }
 
-        /* Скриншоты */
-        .screenshots-container {
-            display: flex;
-            overflow-x: auto;
-            padding-bottom: 15px;
-            gap: 15px;
-            scrollbar-width: thin;
-            scrollbar-color: #888 #f1f1f1;
-            border-radius: 5px;
-            background-color: #f1f1f1;
-            padding: 15px;
-        }
+    /* Скриншоты */
+    .screenshots-container {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        gap: 15px;
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+        border-radius: 5px;
+        background-color: #f1f1f1;
+        padding: 15px;
+    }
 
-        .screenshots-container::-webkit-scrollbar {
-            height: 10px;
-        }
+    .screenshots-container::-webkit-scrollbar {
+        height: 10px;
+    }
 
-        .screenshots-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
+    .screenshots-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
 
-        .screenshots-container::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
+    .screenshots-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
 
-        .screenshots-container img {
-            flex-shrink: 0;
-            width: 800px;
-            height: auto;
-            border-radius: 5px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
+    .screenshots-container img {
+        flex-shrink: 0;
+        width: 800px;
+        height: auto;
+        border-radius: 5px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
 
-        .screenshots-container img:hover {
-            transform: scale(1.02);
-        }
-    </style>
+    .screenshots-container img:hover {
+        transform: scale(1.02);
+    }
+</style>
 </head>
 <body>
-    <header>
-        <a href="index.html"><h1>Ulight engine</h1></a>
-        <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Download</a>
-        <a href="https://vk.com/club230211963?from=groups" target="_blank">VK</a>
-        <a href="https://t.me/Ulight_studio" target="_blank">Telegram</a>
-        <div class="language-selector">
-            <select>
-                <option value="ru">Русский</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-    </header>
-
-    <!-- Блок для системы аккаунтов -->
-    <section id="auth-section">
-        <h2>Login or Register</h2>
-        <div id="auth-forms">
-            <!-- Форма входа -->
-            <div id="login-form">
-                <h3>Login</h3>
-                <input type="text" id="login-username" placeholder="Username" />
-                <input type="password" id="login-password" placeholder="Password" />
-                <button onclick="login()">Login</button>
-            </div>
-            <hr>
-            <!-- Форма регистрации -->
-            <div id="register-form">
-                <h3>Register</h3>
-                <input type="text" id="register-username" placeholder="Username" />
-                <input type="password" id="register-password" placeholder="Password" />
-                <button onclick="register()">Register</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Блок профиля для отображения после входа -->
-    <div id="profile">
-        <h2>Welcome, <span id="user-name"></span>!</h2>
-        <button onclick="logout()">Logout</button>
+<header>
+    <a href="index.html"><h1>Ulight engine</h1></a>
+    <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Download</a>
+    <a href="https://vk.com/club230211963?from=groups" target="_blank">VK</a>
+    <a href="https://t.me/Ulight_studio" target="_blank">Telegram</a>
+    <!-- Переключатель языка -->
+    <div class="language-selector">
+        <select id="language-select">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+        </select>
     </div>
+</header>
 
-    <main>
-        <h4>Screenshots:</h4>
-        <div class="screenshots-container">
-            <img src="1.PNG" alt="Screenshot 1" />
-            <img src="2.png" alt="Screenshot 2" />
-            <img src="3.png" alt="Screenshot 3" />
+<!-- Блок для системы аккаунтов -->
+<section id="auth-section">
+    <h2 data-i18n="auth_title">Login or Register</h2>
+    <div id="auth-forms">
+        <!-- Форма входа -->
+        <div id="login-form">
+            <h3 data-i18n="login">Login</h3>
+            <input type="text" id="login-username" placeholder="" data-i18n-placeholder="username" />
+            <input type="password" id="login-password" placeholder="" data-i18n-placeholder="password" />
+            <button onclick="login()" data-i18n="login_button">Login</button>
         </div>
-    </main>
-    <text class="test">
-        <h1>About us:</h1>
-        <h3>Our development team cares about the quality of our product.</h3>
-        <h3>We are always improving the engine.</h3>
-        <h3>To contact us, you can use <a href="https://t.me/+mzgwKqFTuhNjZDBi">our Telegram chat</a>.</h3>
-    </text>
+        <hr>
+        <!-- Форма регистрации -->
+        <div id="register-form">
+            <h3 data-i18n="register">Register</h3>
+            <input type="text" id="register-username" placeholder="" data-i18n-placeholder="username" />
+            <input type="password" id="register-password" placeholder="" data-i18n-placeholder="password" />
+            <button onclick="register()" data-i18n="register_button">Register</button>
+        </div>
+    </div>
+</section>
 
-    <script>
-        // Получаем элементы
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const profileDiv = document.getElementById('profile');
-        const userNameSpan = document.getElementById('user-name');
-        const authSection = document.getElementById('auth-section');
+<!-- Блок профиля для отображения после входа -->
+<div id="profile">
+    <h2><span data-i18n="welcome">Welcome</span>, <span id="user-name"></span>!</h2>
+    <button onclick="logout()" data-i18n="logout_button">Logout</button>
+</div>
 
-        // Проверяем есть ли вошедший пользователь при загрузке
-        window.onload = () => {
-            const currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
-                showProfile(currentUser);
-            } else {
-                showAuthForms();
-            }
-        };
+<main>
+    <h4 data-i18n="screenshots">Screenshots:</h4>
+    <div class="screenshots-container">
+        <img src="1.PNG" alt="Screenshot 1" />
+        <img src="2.png" alt="Screenshot 2" />
+        <img src="3.png" alt="Screenshot 3" />
+    </div>
+</main>
+<text class="test">
+    <h1 data-i18n="about_us_title">About us:</h1>
+    <h3 data-i18n="about_us_line1">Our development team cares about the quality of our product.</h3>
+    <h3 data-i18n="about_us_line2">We are always improving the engine.</h3>
+    <h3 data-i18n="about_us_line3">To contact us, you can use <a href="https://t.me/+mzgwKqFTuhNjZDBi" data-i18n="telegram_link">our Telegram chat</a>.</h3>
+</text>
 
-        function showAuthForms() {
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'block';
-            profileDiv.style.display = 'none';
+<script>
+    // Переводы
+    const translations = {
+        en: {
+            auth_title: "Login or Register",
+            login: "Login",
+            register: "Register",
+            login_button: "Login",
+            register_button: "Register",
+            username: "Username",
+            password: "Password",
+            welcome: "Welcome",
+            logout_button: "Logout",
+            screenshots: "Screenshots:",
+            about_us_title: "About us:",
+            about_us_line1: "Our development team cares about the quality of our product.",
+            about_us_line2: "We are always improving the engine.",
+            about_us_line3: "To contact us, you can use ",
+            telegram_link: "our Telegram chat"
+        },
+        ru: {
+            auth_title: "Войти или зарегистрироваться",
+            login: "Войти",
+            register: "Регистрация",
+            login_button: "Войти",
+            register_button: "Зарегистрироваться",
+            username: "Имя пользователя",
+            password: "Пароль",
+            welcome: "Добро пожаловать",
+            logout_button: "Выйти",
+            screenshots: "Скриншоты:",
+            about_us_title: "О нас:",
+            about_us_line1: "Наша команда заботится о качестве нашего продукта.",
+            about_us_line2: "Мы постоянно улучшаем движок.",
+            about_us_line3: "Для связи с нами, вы можете использовать ",
+            telegram_link: "наш чат в Telegram"
         }
+    };
 
-        function showProfile(username) {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'none';
-            profileDiv.style.display = 'block';
-            authSection.style.display = 'none'; // скрываем блок входа/регистрации
-            userNameSpan.textContent = username;
+    let currentLanguage = 'ru'; // по умолчанию русский
+
+    const langSelect = document.getElementById('language-select');
+
+    // Обработчик переключения языка
+    langSelect.addEventListener('change', () => {
+        currentLanguage = langSelect.value;
+        translatePage();
+    });
+
+    // Функция для перевода страницы
+    function translatePage() {
+        const trans = translations[currentLanguage];
+
+        // Переводим все элементы с атрибутом data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (trans[key]) {
+                el.textContent = trans[key];
+            }
+        });
+
+        // Переводим плейсхолдеры
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (trans[key]) {
+                el.setAttribute('placeholder', trans[key]);
+            }
+        });
+
+        // Обновляем содержимое внутри элементов с переменными
+        // Например, приветствие "Welcome, {username}!"
+        // В данном случае, у нас это "Welcome, <span id='user-name'></span>!"
+        // Можно обновить вручную, если нужно
+        if (currentLanguage === 'en') {
+            // ничего дополнительно не нужно, т.к. всё изначально на английском
+        } else {
+            // для русского можно оставить как есть, или дополнительно перевести
+            // но сейчас переводим только через data-i18n
         }
+    }
 
-        function register() {
-            const username = document.getElementById('register-username').value.trim();
-            const password = document.getElementById('register-password').value.trim();
+    // Изначально устанавливаем язык
+    window.onload = () => {
+        // Устанавливаем выбранный язык в селектор
+        langSelect.value = currentLanguage;
+        translatePage();
 
-            if (!username || !password) {
-                alert('Please fill in all fields.');
-                return;
-            }
-
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-
-            if (users[username]) {
-                alert('This username is already taken.');
-                return;
-            }
-
-            // "Hash" password using base64 (for educational purposes)
-            const hashedPassword = btoa(password);
-
-            // Save user
-            users[username] = { password: hashedPassword };
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('Registration successful! You can now log in.');
-            // Clear fields
-            document.getElementById('register-username').value = '';
-            document.getElementById('register-password').value = '';
-        }
-
-        function login() {
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-
-            if (!username || !password) {
-                alert('Please fill in all fields.');
-                return;
-            }
-
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-
-            if (users[username]) {
-                const hashedPassword = users[username].password;
-                // Compare hashes
-                if (hashedPassword === btoa(password)) {
-                    // Successful login
-                    localStorage.setItem('currentUser', username);
-                    showProfile(username);
-                } else {
-                    alert('Incorrect username or password.');
-                }
-            } else {
-                alert('User not found.');
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('currentUser');
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            showProfile(currentUser);
+        } else {
             showAuthForms();
-            // Показываем блок входа/регистрации снова
-            authSection.style.display = 'block';
         }
-    </script>
+    };
+
+    // Получаем элементы
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const profileDiv = document.getElementById('profile');
+    const userNameSpan = document.getElementById('user-name');
+    const authSection = document.getElementById('auth-section');
+
+    function showAuthForms() {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'block';
+        profileDiv.style.display = 'none';
+        document.getElementById('auth-section').style.display = 'block';
+    }
+
+    function showProfile(username) {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'none';
+        profileDiv.style.display = 'block';
+        authSection.style.display = 'none'; // скрываем вход/регистрацию
+        userNameSpan.textContent = username;
+    }
+
+    function register() {
+        const username = document.getElementById('register-username').value.trim();
+        const password = document.getElementById('register-password').value.trim();
+
+        if (!username || !password) {
+            alert(currentLanguage === 'en' ? 'Please fill in all fields.' : 'Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+
+        if (users[username]) {
+            alert(currentLanguage === 'en' ? 'This username is already taken.' : 'Это имя уже занято.');
+            return;
+        }
+
+        const hashedPassword = btoa(password);
+        users[username] = { password: hashedPassword };
+        localStorage.setItem('users', JSON.stringify(users));
+        alert(currentLanguage === 'en' ? 'Registration successful! You can now log in.' : 'Регистрация успешна! Теперь вы можете войти.');
+        document.getElementById('register-username').value = '';
+        document.getElementById('register-password').value = '';
+    }
+
+    function login() {
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if (!username || !password) {
+            alert(currentLanguage === 'en' ? 'Please fill in all fields.' : 'Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+
+        if (users[username]) {
+            const hashedPassword = users[username].password;
+            if (hashedPassword === btoa(password)) {
+                localStorage.setItem('currentUser', username);
+                showProfile(username);
+            } else {
+                alert(currentLanguage === 'en' ? 'Incorrect username or password.' : 'Неверное имя пользователя или пароль.');
+            }
+        } else {
+            alert(currentLanguage === 'en' ? 'User not found.' : 'Пользователь не найден.');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('currentUser');
+        showAuthForms();
+        document.getElementById('auth-section').style.display = 'block';
+    }
+</script>
 </body>
 </html>
