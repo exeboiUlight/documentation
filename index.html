@@ -1,462 +1,1053 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ulight game engine</title>
-<link rel="icon" href="light.ico" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ulight Game Engine - современный игровой движок для создания 2D и 3D игр с JavaScript">
+    <title>Ulight Game Engine - Создавайте игры легко</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
+    <link rel="icon" href="light.ico" type="image/x-icon" />
+    
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #8B5CF6;
+            --accent: #EC4899;
+            --background: #0F172A;
+            --surface: #1E293B;
+            --surface-light: #334155;
+            --text: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
 
-    body {
-        background-color: #a9a9a9;
-        color: #222;
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    a {
-        color: #333;
-        text-decoration: underline;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    a:hover {
-        color: #000;
-    }
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--surface);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
 
-    header {
-        background-color: #d3d3d3;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-    .sheach-bar {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-    }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    header a {
-        padding: 5px 7px;
-        text-decoration: none;
-        background-color: #b3b3b3;
-        border-radius: 7px;
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
 
-    header a:hover {
-        transition: 250ms;
-        background-color: #a3a3a3;
-    }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
 
-    /* Стили для секции аккаунтов */
-    #auth-section {
-        background-color: #f1f1f1;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 400px;
-        margin-bottom: 20px;
-    }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
 
-    #auth-section h2 {
-        margin-bottom: 15px;
-        text-align: center;
-    }
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
 
-    /* Форма */
-    .auth-form {
-        display: flex;
-        flex-direction: column;
-    }
+        .language-switch {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--surface);
+            padding: 0.25rem;
+            border-radius: 0.5rem;
+        }
 
-    .auth-form input {
-        padding: 8px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
+        .language-switch button {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
 
-    .auth-form button {
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #b3b3b3;
-        cursor: pointer;
-        font-weight: bold;
-    }
+        .language-switch button.active {
+            background: var(--primary);
+            color: white;
+        }
 
-    .auth-form button:hover {
-        background-color: #a3a3a3;
-    }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
 
-    /* Стиль для профиля */
-    #profile {
-        display: none;
-        background-color: #f9f9f9;
-        padding: 15px;
-        border-radius: 10px;
-        max-width: 400px;
-        margin-bottom: 20px;
-    }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
 
-    #profile h2 {
-        margin-bottom: 10px;
-    }
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+        }
 
-    /* Остальной стиль */
-    h4 {
-        margin-bottom: 10px;
-    }
+        .btn-secondary:hover {
+            background: var(--surface-light);
+            box-shadow: 0 10px 30px rgba(30, 41, 59, 0.5);
+        }
 
-    /* Скриншоты */
-    .screenshots-container {
-        display: flex;
-        overflow-x: auto;
-        padding-bottom: 15px;
-        gap: 15px;
-        scrollbar-width: thin;
-        scrollbar-color: #888 #f1f1f1;
-        border-radius: 5px;
-        background-color: #f1f1f1;
-        padding: 15px;
-    }
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 5rem 5%;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(ellipse at top, var(--surface) 0%, var(--background) 50%);
+        }
 
-    .screenshots-container::-webkit-scrollbar {
-        height: 10px;
-    }
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
 
-    .screenshots-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
 
-    .screenshots-container::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 10px;
-    }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    doc {
-        display: none;
-        flex-shrink: 0;
-        width: 800px;
-        height: auto;
-        border-radius: 5px;
-        box-shadow: 2px 2px 8px rgba(184, 184, 184, 0.3);
-        transition: transform 0.3s ease;
-    }
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
 
-    doc h3 {
-        flex-shrink: 0;
-        width: 800px;
-        height: auto;
-        border-radius: 5px;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-    }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
 
-    .screenshots-container img {
-        flex-shrink: 0;
-        width: 800px;
-        height: auto;
-        border-radius: 5px;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-    }
+        .hero-image {
+            position: relative;
+        }
 
-    .screenshots-container img:hover {
-        transform: scale(1.02);
-    }
-</style>
+        .hero-image img {
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5% 5rem;
+            background: var(--surface);
+            /* Добавьте это: */
+            padding-top: calc(5rem + 80px);
+            margin-top: -80px; /* Компенсируем отрицательным margin */
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--background);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--surface-light);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Quick Start Section */
+        .quickstart {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .quickstart-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .step {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step h3 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+
+        /* Hotkeys Table */
+        .hotkeys-table {
+            background: var(--surface);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .hotkeys-table h3 {
+            padding: 1.5rem;
+            background: var(--surface-light);
+            border-bottom: 1px solid var(--background);
+        }
+
+        .hotkey-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--background);
+            transition: background 0.3s ease;
+        }
+
+        .hotkey-item:hover {
+            background: var(--surface-light);
+        }
+
+        .hotkey-item:last-child {
+            border-bottom: none;
+        }
+
+        .hotkey {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--background);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        /* Code Section */
+        .code-section {
+            padding: 5rem 5%;
+            background: var(--surface);
+        }
+
+        .code-example {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--background);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-header {
+            background: var(--surface-light);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--surface);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #EF4444; }
+        .dot-yellow { background: #F59E0B; }
+        .dot-green { background: #10B981; }
+
+        pre {
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--surface);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--surface-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .quickstart-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
 </head>
 <body>
-<header>
-    <a href="index.html"><h1>Ulight engine</h1></a>
-    <a href="https://exe-boi.itch.io/ulight-game-engine-launcher" target="_blank">Download</a>
-    <a href="https://vk.com/club230211963?from=groups" target="_blank">VK</a>
-    <a href="https://t.me/Ulight_studio" target="_blank">Telegram</a>
-    <!-- Переключатель языка -->
-    <div class="language-selector">
-        <select id="language-select">
-            <option value="ru">Русский</option>
-            <option value="en">English</option>
-        </select>
-    </div>
-    <Button onclick="DocStart()">Documentation</Button>
-</header>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">Ulight Engine</div>
+            <div class="nav-links">
+                <a href="#home">Главная</a>
+                <a href="#features">Возможности</a>
+                <a href="#docs">Документация</a>
+                <a href="#download">Скачать</a>
+                <a href="#community">Сообщество</a>
+                <a href="#support">Поддержка</a>
+            </div>
+            <div class="nav-actions">
+                <div class="language-switch">
+                    <button class="active">RU</button>
+                    <button>EN</button>
+                </div>
+                <a href="#" class="btn">Войти</a>
+            </div>
+        </nav>
+    </header>
 
-<!-- Блок для системы аккаунтов -->
-<section id="auth-section">
-    <h2 data-i18n="auth_title">Login or Register</h2>
-    <div id="auth-forms">
-        <!-- Форма входа -->
-        <div id="login-form">
-            <h3 data-i18n="login">Login</h3>
-            <input type="text" id="login-username" placeholder="" data-i18n-placeholder="username" />
-            <input type="password" id="login-password" placeholder="" data-i18n-placeholder="password" />
-            <button onclick="login()" data-i18n="login_button">Login</button>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content fade-in">
+            <div class="hero-text">
+                <h1>Создавайте игры с <span class="gradient-text">Ulight Engine</span></h1>
+                <p>Современный игровой движок для разработки 2D и 3D игр с использованием JavaScript. Простой, мощный и бесплатный.</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn">
+                        <i class="fas fa-download"></i> Скачать движок
+                    </a>
+                    <a href="#docs" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> Документация
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="ulight.png" alt="Ulight Engine Preview">
+            </div>
         </div>
-        <hr>
-        <!-- Форма регистрации -->
-        <div id="register-form">
-            <h3 data-i18n="register">Register</h3>
-            <input type="text" id="register-username" placeholder="" data-i18n-placeholder="username" />
-            <input type="password" id="register-password" placeholder="" data-i18n-placeholder="password" />
-            <button onclick="register()" data-i18n="register_button">Register</button>
+    </section>
+        <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Почему <span class="gradient-text">Ulight Engine</span>?</h2>
+            <p>Всё необходимое для создания потрясающих игр</p>
         </div>
-    </div>
-</section>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>полная свобода действий</h3>
+                <p>Вы можете делать всё что душе вздумается</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>JavaScript API</h3>
+                <p>Используйте знакомый JavaScript для создания игровой логики и механик</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <h3>Редактор сцен</h3>
+                <p>Интуитивный визуальный редактор для создания и настройки игровых уровней</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3>Быстрый старт</h3>
+                <p>От идеи до прототипа за считанные минуты благодаря простоте использования</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Активное сообщество</h3>
+                <p>Получайте помощь, делитесь опытом и находите единомышленников</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <h3>Регулярные обновления</h3>
+                <p>Постоянное развитие движка и добавление новых возможностей</p>
+            </div>
+        </div>
+    </section>
 
-<!-- Блок профиля для отображения после входа -->
-<div id="profile">
-    <h2><span data-i18n="welcome">Welcome</span>, <span id="user-name"></span>!</h2>
-    <button onclick="logout()" data-i18n="logout_button">Logout</button>
-</div>
+    <!-- Quick Start Section -->
+    <section class="quickstart" id="quickstart">
+        <div class="section-header">
+            <h2>Быстрый старт</h2>
+            <p>Начните создавать игры уже сегодня</p>
+        </div>
+        <div class="quickstart-content">
+            <div class="steps">
+                <div class="step fade-in">
+                    <h3>
+                        <span class="step-number">1</span>
+                        Установка движка
+                    </h3>
+                    <p>Скачайте последнюю версию Ulight Engine и установите её на ваш компьютер. Процесс займёт всего несколько минут.</p>
+                </div>
+                <div class="step fade-in">
+                    <h3>
+                        <span class="step-number">2</span>
+                        Создание проекта
+                    </h3>
+                    <p>После установки нажмите "Создать проект" и выберите шаблон для вашей игры.</p>
+                </div>
+                <div class="step fade-in">
+                    <h3>
+                        <span class="step-number">3</span>
+                        Работа в редакторе
+                    </h3>
+                    <p>Используйте визуальный редактор для создания сцен. Перемещайтесь с помощью мыши и клавиш W, A, S, D, Q, E.</p>
+                </div>
+                <div class="step fade-in">
+                    <h3>
+                        <span class="step-number">4</span>
+                        Программирование
+                    </h3>
+                    <p>Пишите игровую логику на JavaScript. Рекомендуем использовать Visual Studio Code для удобной разработки.</p>
+                </div>
+            </div>
+            <div class="hotkeys-table fade-in">
+                <h3><i class="fas fa-keyboard"></i> Горячие клавиши</h3>
+                <div class="hotkey-item">
+                    <span>Тёмная тема</span>
+                    <span class="hotkey">Ctrl + Shift + 1</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Светлая тема</span>
+                    <span class="hotkey">Ctrl + Shift + 2</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Консольная тема</span>
+                    <span class="hotkey">Ctrl + Shift + 3</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Новая сцена</span>
+                    <span class="hotkey">Ctrl + Shift + P</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Добавить модель</span>
+                    <span class="hotkey">Ctrl + Shift + M</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Добавить изображение</span>
+                    <span class="hotkey">Ctrl + Shift + I</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Обновить сцену</span>
+                    <span class="hotkey">F2</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Открыть папку проекта</span>
+                    <span class="hotkey">F3</span>
+                </div>
+                <div class="hotkey-item">
+                    <span>Запустить игру</span>
+                    <span class="hotkey">F5</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<main id="mains">
-    <h4 data-i18n="screenshots">Screenshots:</h4>
-    <div class="screenshots-container">
-        <img src="1.png" alt="Screenshot 1" />
-        <img src="2.png" alt="Screenshot 2" />
-        <img src="3.png" alt="Screenshot 3" />
-    </div>
-</main>
-<text class="test">
-    <h1 data-i18n="about_us_title">About us:</h1>
-    <h3 data-i18n="about_us_line1">Our development team cares about the quality of our product.</h3>
-    <h3 data-i18n="about_us_line2">We are always improving the engine.</h3>
-    <h3 data-i18n="about_us_line3">To contact us, you can use <a href="https://t.me/+mzgwKqFTuhNjZDBi" data-i18n="telegram_link">our Telegram chat</a>.</h3>
-</text>
+    <!-- Code Example Section -->
+    <section class="code-section" id="docs">
+        <div class="section-header">
+            <h2>API Reference</h2>
+            <p>Простой и понятный API для создания игр</p>
+        </div>
+        <div class="code-example fade-in">
+            <div class="code-header">
+                <span>example.js</span>
+            </div>
+            <pre><code>
+                a = [0, 0, 0];
 
-<doc id="documentation">
-    <h1>Ulight game engine</h1>
+                function update() {
+                    RenderEngine.RenderObjects();
+                    RenderEngine.NewModel(0, [0, 0, 0], [1, 1, 1], a, [255, 255, 255]);
+                }
+            </code></pre>
+        </div>
+    </section>
 
-    <h3>После скачивания</h3>
-    <h4>Нажмите на кнопку скачать новую версию и подождите пару минут, пока скачается последняя версия.</h4>
-    <h4>И после того как вам пришло сообщение от движка то что новая версия скачена, вы можете нажать на конопку создать проект.</h4>
-    <h3>Редактор сцен</h3>
-    <h4>В этом редакторе вы можете перемещатся при нажатии правой кнопкой мыши и зажатии клашь W, A, S, D, Q, E.</h4>
-    <h4>В редакторе так же можно нажать левой кнопкой по кнопке открыть папку, которая открывает папку проекта.</h4>
-    <h4>В основном создание игры на Ulight game engine подорузумевает собой программирование сценария и игровой логики на языке js.</h4>
-    <h4>Для программирвоания вы можете использовать редактор кода <a href="https://code.visualstudio.com/">Visual studio code</a>, и документацию к языку <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript">js</a>.</h4>
-    
-    <h3>Комбинации клавишь</h3>
-    <h4>(ctrl + shift + 1) -> тёмная тема</h4>
-    <h4>(ctrl + shift + 2) -> светлая тема</h4>
-    <h4>(ctrl + shift + 3) -> консольная тема</h4>
-    <h4>(ctrl + shift + p) -> новая сцена</h4>
-    <h4>(ctrl + shift + m) -> добавить модель</h4>
-    <h4>(ctrl + shift + i) -> добавить картинку</h4>
-    <h4>(F2) -> обновить сцену</h4>
-    <h4>(F3) -> открыть папку</h4>
-    <h4>(F5) -> запустить игру</h4>
+    <!-- Screenshots Section -->
+    <section class="features" id="screenshots">
+        <div class="section-header">
+            <h2>Галерея</h2>
+            <p>Примеры игр, созданных на Ulight Engine</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <img src="1.PNG" alt="Screenshot 1" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <h3>point and click</h3>
+                <p>
+                    "Jarry man or pizza man" - это игра в жанре Point and click,
+                    в которой мы должны накопить 100000 долоров икупить мега корпорацию
+                </p>
+            </div>
+            <div class="feature-card fade-in">
+                <img src="2.png" alt="Screenshot 2" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <h3>Space war DEMO</h3>
+                <p>Динамичный космический шутер в 2д</p>
+            </div>
+            <!--INDI HORROR GAME-->
+            <div class="feature-card fade-in">
+                <img src="" alt="Screenshot 3" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <h3></h3>
+                <p>Скоро</p>
+            </div>
+        </div>
+    </section>
 
-    <h2>Описание функций</h2>
-    <h3>Класс RenderEngine</h3>
-    <h4>RenderObjects -> Очищает буфера или массивы всех объектов на сцене.</h4>
-    <h4>NewModel -> добавляет в моссив 3д объектов моссив с параметнрами объекта.</h4>
-   
-</doc>
+    <!-- Download Section -->
+    <section class="quickstart" id="download">
+        <div class="section-header">
+            <h2>Скачать Ulight Engine</h2>
+            <p>Выберите версию для вашей операционной системы</p>
+        </div>
+        <div class="features-grid" style="max-width: 800px; margin: 0 auto;">
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon">
+                    <i class="fab fa-windows"></i>
+                </div>
+                <h3>Windows</h3>
+                <p>Windows 10/11 (64-bit)</p>
+                <a href="https://drive.google.com/uc?export=download&id=1BD0rtx4HsHTTr9B-d9HYDV-Q7sf7IpcL" class="btn" download="Ulight game engine hub 2.0.zip" style="margin-top: 1rem;">
+                    <i class="fas fa-download"></i> Скачать v2.1.0
+                </a>
+            </div>
+            <!--
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon">
+                    <i class="fab fa-apple"></i>
+                </div>
+                <h3>macOS</h3>
+                <p>macOS 10.15+</p>
+                <a href="#" class="btn" style="margin-top: 1rem;">
+                    <i class="fas fa-download"></i> Скачать v1.0.0
+                </a>
+            </div>
+            <div class="feature-card fade-in" style="text-align: center;">
+                <div class="feature-icon">
+                    <i class="fab fa-linux"></i>
+                </div>
+                <h3>Linux</h3>
+                <p>Ubuntu 20.04+</p>
+                <a href="#" class="btn" style="margin-top: 1rem;">
+                    <i class="fas fa-download"></i> Скачать v1.0.0
+                </a>
+            </div>
+            -->
+        </div>
+        <div style="text-align: center; margin-top: 3rem;">
+            <p style="color: var(--text-secondary);">
+                <i class="fas fa-info-circle"></i> 
+                Минимальные требования: 1GB RAM, OpenGL 3.0
+            </p>
+        </div>
+    </section>
 
-<script>
-    // Переводы
-    const translations = {
-        en: {
-            auth_title: "Login or Register",
-            login: "Login",
-            register: "Register",
-            login_button: "Login",
-            register_button: "Register",
-            username: "Username",
-            password: "Password",
-            welcome: "Welcome",
-            logout_button: "Logout",
-            screenshots: "Screenshots:",
-            about_us_title: "About us:",
-            about_us_line1: "Our development team cares about the quality of our product.",
-            about_us_line2: "We are always improving the engine.",
-            about_us_line3: "To contact us, you can use ",
-            telegram_link: "our Telegram chat"
-        },
-        ru: {
-            auth_title: "Войти или зарегистрироваться",
-            login: "Войти",
-            register: "Регистрация",
-            login_button: "Войти",
-            register_button: "Зарегистрироваться",
-            username: "Имя пользователя",
-            password: "Пароль",
-            welcome: "Добро пожаловать",
-            logout_button: "Выйти",
-            screenshots: "Скриншоты:",
-            about_us_title: "О нас:",
-            about_us_line1: "Наша команда заботится о качестве нашего продукта.",
-            about_us_line2: "Мы постоянно улучшаем движок.",
-            about_us_line3: "Для связи с нами, вы можете использовать ",
-            telegram_link: "наш чат в Telegram"
-        }
-    };
+    <!-- Contact Section -->
+    <section class="contact" id="support">
+        <div class="section-header">
+            <h2>Свяжитесь с нами</h2>
+            <p>Мы всегда рады помочь и ответить на ваши вопросы</p>
+        </div>
+        <div class="contact-links">
+            <a href="https://t.me/Ulight_studio" class="contact-link">
+                <i class="fab fa-telegram"></i>
+                <span>Telegram канал</span>
+            </a>
+            <a href="https://discord.gg/yMJ52vvm" class="contact-link">
+                <i class="fab fa-discord"></i>
+                <span>Discord сервер</span>
+            </a>
+            <a href="https://exeboiulight.github.io/asset-store-ulight-game-engine/" class="contact-link">
+                <i class="fab fa-github"></i>
+                <span>Asset store</span>
+            </a>
+        </div>
+    </section>
 
-    let currentLanguage = 'ru'; // по умолчанию русский
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Ulight Game Engine. Все права защищены.</p>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">
+            Сделано с <span style="color: var(--accent);">❤️</span> для разработчиков игр
+        </p>
+    </footer>
 
-    const langSelect = document.getElementById('language-select');
-
-    // Обработчик переключения языка
-    langSelect.addEventListener('change', () => {
-        currentLanguage = langSelect.value;
-        translatePage();
-    });
-
-    // Функция для перевода страницы
-    function translatePage() {
-        const trans = translations[currentLanguage];
-
-        // Переводим все элементы с атрибутом data-i18n
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (trans[key]) {
-                el.textContent = trans[key];
-            }
-        });
-
-        // Переводим плейсхолдеры
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (trans[key]) {
-                el.setAttribute('placeholder', trans[key]);
-            }
-        });
-
-        // Обновляем содержимое внутри элементов с переменными
-        // Например, приветствие "Welcome, {username}!"
-        // В данном случае, у нас это "Welcome, <span id='user-name'></span>!"
-        // Можно обновить вручную, если нужно
-        if (currentLanguage === 'en') {
-            // ничего дополнительно не нужно, т.к. всё изначально на английском
-        } else {
-            // для русского можно оставить как есть, или дополнительно перевести
-            // но сейчас переводим только через data-i18n
-        }
-    }
-
-    // Изначально устанавливаем язык
-    window.onload = () => {
-        // Устанавливаем выбранный язык в селектор
-        langSelect.value = currentLanguage;
-        translatePage();
-
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            showProfile(currentUser);
-        } else {
-            showAuthForms();
-        }
-    };
-
-    // Получаем элементы
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const profileDiv = document.getElementById('profile');
-    const userNameSpan = document.getElementById('user-name');
-    const authSection = document.getElementById('auth-section');
-
-    function showAuthForms() {
-        loginForm.style.display = 'block';
-        registerForm.style.display = 'block';
-        profileDiv.style.display = 'none';
-        document.getElementById('auth-section').style.display = 'block';
-    }
-
-    function showProfile(username) {
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'none';
-        profileDiv.style.display = 'block';
-        authSection.style.display = 'none'; // скрываем вход/регистрацию
-        userNameSpan.textContent = username;
-    }
-
-    function register() {
-        const username = document.getElementById('register-username').value.trim();
-        const password = document.getElementById('register-password').value.trim();
-
-        if (!username || !password) {
-            alert(currentLanguage === 'en' ? 'Please fill in all fields.' : 'Пожалуйста, заполните все поля.');
-            return;
-        }
-
-        let users = JSON.parse(localStorage.getItem('users')) || {};
-
-        if (users[username]) {
-            alert(currentLanguage === 'en' ? 'This username is already taken.' : 'Это имя уже занято.');
-            return;
-        }
-
-        const hashedPassword = btoa(password);
-        users[username] = { password: hashedPassword };
-        localStorage.setItem('users', JSON.stringify(users));
-        alert(currentLanguage === 'en' ? 'Registration successful! You can now log in.' : 'Регистрация успешна! Теперь вы можете войти.');
-        document.getElementById('register-username').value = '';
-        document.getElementById('register-password').value = '';
-    }
-
-    function login() {
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-
-        if (!username || !password) {
-            alert(currentLanguage === 'en' ? 'Please fill in all fields.' : 'Пожалуйста, заполните все поля.');
-            return;
-        }
-
-        let users = JSON.parse(localStorage.getItem('users')) || {};
-
-        if (users[username]) {
-            const hashedPassword = users[username].password;
-            if (hashedPassword === btoa(password)) {
-                localStorage.setItem('currentUser', username);
-                showProfile(username);
-            } else {
-                alert(currentLanguage === 'en' ? 'Incorrect username or password.' : 'Неверное имя пользователя или пароль.');
-            }
-        } else {
-            alert(currentLanguage === 'en' ? 'User not found.' : 'Пользователь не найден.');
-        }
-    }
-
-    function logout() {
-        localStorage.removeItem('currentUser');
-        showAuthForms();
-        document.getElementById('auth-section').style.display = 'block';
-    }
-</script>
-
-<script>
-    // Функция для переключения отображения документации
-    function DocStart() {
-        const docElement = document.getElementById('documentation');
-        if (docElement.style.display === 'none') {
-            docElement.style.display = 'block';
-            // Скрываем все другие элементы
-            document.querySelectorAll('body > *:not(header):not(doc)').forEach(el => {
-                el.style.display = 'none';
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
-        } else {
-            docElement.style.display = 'none';
+        });
+
+        // Header scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.background = 'rgba(15, 23, 42, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Language switch
+        document.querySelectorAll('.language-switch button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.language-switch button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Здесь можно добавить логику переключения языка
+                const lang = this.textContent;
+                console.log('Switching to language:', lang);
+            });
+        });
+
+        // Download buttons hover effect
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function(e) {
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.width = ripple.style.height = '0px';
+                ripple.style.top = '50%';
+                ripple.style.left = '50%';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    width: 200px;
+                    height: 200px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Mobile menu toggle (for future implementation)
+        function createMobileMenu() {
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.className = 'mobile-menu-btn';
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            mobileMenuBtn.style.display = 'none';
+            
+            // Add styles for mobile menu button
+            const mobileStyles = document.createElement('style');
+            mobileStyles.textContent = `
+                .mobile-menu-btn {
+                    display: none;
+                    background: transparent;
+                    border: none;
+                    color: var(--text);
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    padding: 0.5rem;
+                }
+                
+                @media (max-width: 768px) {
+                    .mobile-menu-btn {
+                        display: block !important;
+                    }
+                    
+                    .nav-links {
+                        position: fixed;
+                        top: 80px;
+                        left: -100%;
+                        width: 100%;
+                        height: calc(100vh - 80px);
+                        background: var(--background);
+                        flex-direction: column;
+                        padding: 2rem;
+                        transition: left 0.3s ease;
+                    }
+                    
+                    .nav-links.active {
+                        left: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(mobileStyles);
+            
+            // Insert mobile menu button
+            const nav = document.querySelector('nav');
+            nav.insertBefore(mobileMenuBtn, nav.querySelector('.nav-actions'));
+            
+            // Toggle mobile menu
+            mobileMenuBtn.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.toggle('active');
+                mobileMenuBtn.innerHTML = document.querySelector('.nav-links').classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
         }
-    }
+        
+        createMobileMenu();
 
-    // Инициализация - скрываем doc при загрузке
-    window.onload = function() {
-        document.getElementById('documentation').style.display = 'none';
-    };
-</script>
+        // Code highlighting simulation
+        const codeElement = document.querySelector('code');
+        if (codeElement) {
+            const codeText = codeElement.textContent;
+            const keywords = ['const', 'new', 'function', 'return', 'if', 'else', 'for', 'while', 'class'];
+            const strings = /"([^"]*)"|'([^']*)'/g;
+            const comments = /\/\/.*$/gm;
+            const numbers = /\b\d+\b/g;
 
+            let highlightedCode = codeText;
+
+            // Highlight keywords
+            keywords.forEach(keyword => {
+                const regex = new RegExp('\\b' + keyword + '\\b', 'g');
+                highlightedCode = highlightedCode.replace(regex, `<span style="color: var(--primary)">${keyword}</span>`);
+            });
+
+            // Highlight strings
+            highlightedCode = highlightedCode.replace(strings, '<span style="color: var(--success)">$&</span>');
+
+            // Highlight comments
+            highlightedCode = highlightedCode.replace(comments, '<span style="color: var(--text-secondary)">$&</span>');
+
+            // Highlight numbers
+            highlightedCode = highlightedCode.replace(numbers, '<span style="color: var(--accent)">$&</span>');
+
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+            // Использование:
+            codeElement.innerHTML = escapeHtml(rawCode);
+        }
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Dynamic year in footer
+        const yearElement = document.querySelector('footer p');
+        if (yearElement) {
+            const currentYear = new Date().getFullYear();
+            yearElement.innerHTML = yearElement.innerHTML.replace('2024', currentYear);
+        }
+
+        // Initialize tooltips
+        function initTooltips() {
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            tooltipElements.forEach(el => {
+                el.addEventListener('mouseenter', function(e) {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = this.getAttribute('data-tooltip');
+                    tooltip.style.cssText = `
+                        position: absolute;
+                        background: var(--surface-light);
+                        color: var(--text);
+                        padding: 0.5rem 1rem;
+                        border-radius: 0.25rem;
+                        font-size: 0.875rem;
+                        white-space: nowrap;
+                        z-index: 1000;
+                        pointer-events: none;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    `;
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = this.getBoundingClientRect();
+                    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+                    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+                    
+                    setTimeout(() => tooltip.style.opacity = '1', 10);
+                    
+                    this.addEventListener('mouseleave', function() {
+                        tooltip.style.opacity = '0';
+                        setTimeout(() => tooltip.remove(), 300);
+                    }, { once: true });
+                });
+            });
+        }
+
+        // Performance optimization - lazy loading images
+        const images = document.querySelectorAll('img');
+        const imageOptions = {
+            threshold: 0,
+            rootMargin: '0px 0px 50px 0px'
+        };
+
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '0';
+                    img.addEventListener('load', () => {
+                        img.style.transition = 'opacity 0.5s ease';
+                        img.style.opacity = '1';
+                    });
+                    observer.unobserve(img);
+                }
+            });
+        }, imageOptions);
+
+        images.forEach(img => imageObserver.observe(img));
+
+        // Console easter egg
+        console.log('%c Welcome to Ulight Engine! 🎮', 'font-size: 20px; color: #6366F1; font-weight: bold;');
+        console.log('%c Start creating amazing games today!', 'font-size: 14px; color: #8B5CF6;');
+    </script>
 </body>
 </html>
