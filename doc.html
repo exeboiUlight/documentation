@@ -1,21 +1,344 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <title>Документация</title>
-  </head>
-
-  <body>
-    <h1>Классы</h1>
-    <h4>InputEngine</h4>
-    <h3>  Keys() - в этой функции есть только один аргумент. Он принемает любую клавишу из списка Keys (Этот список является отдельным классом). Возврощает либо false (если не нажата), либо true (если клавиша нажата).</h3>
-    <h3>  MousePos() - возврощает позтцтю мыши в моссиве</h3>
-    <h3>  MouseClick() - возврощает массив (нажата лкм и нажата пкм), выглядит так [лкм, пкм]</h3>
-    <h3>  SetMousePos() - задаёт позицию мыши (имеет 2 аргумента x и y, туда надо передать Number)</h3>
-    <h3>  SetMouseVisable() - задаёт видемость мыши (имеет одн аргумент в который нужно передать true или false)</h3>
-    <h4>Engine</h4>
-    <h4>Camera</h4>
-    <h4>Time</h4>
-    <h4>VariableSystem</h4>
-    <h4>Component</h4>
-  </body>
+<head>
+    <title>ULight Engine - Документация API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            background-color: #f0f7fd;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .class-container {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .method {
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .method-name {
+            font-weight: bold;
+            color: #2980b9;
+            font-size: 1.1em;
+        }
+        
+        .method-params {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .method-return {
+            color: #27ae60;
+        }
+        
+        .method-desc {
+            margin-top: 10px;
+        }
+        
+        code {
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>ULight Engine API Documentation</h1>
+    
+    <div class="class-container">
+        <h2>InputEngine</h2>
+        <p>Класс для работы с вводом (клавиатура и мышь)</p>
+        
+        <div class="method">
+            <div class="method-name">Keys(key)</div>
+            <div class="method-params">Параметры: key (string) - клавиша из списка Keys</div>
+            <div class="method-return">Возвращает: boolean - состояние клавиши (нажата/не нажата)</div>
+            <div class="method-desc">
+                Проверяет состояние указанной клавиши. Возвращает true, если клавиша нажата, и false в противном случае.
+                <pre><code>if (InputEngine.Keys(Keys.space)) {
+    // Действие при нажатии пробела
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">MousePos()</div>
+            <div class="method-return">Возвращает: [number, number] - позиция мыши [x, y]</div>
+            <div class="method-desc">
+                Возвращает текущую позицию курсора мыши в виде массива [x, y].
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">MouseClick()</div>
+            <div class="method-return">Возвращает: [boolean, boolean] - состояния кнопок [ЛКМ, ПКМ]</div>
+            <div class="method-desc">
+                Возвращает состояния кнопок мыши: первый элемент массива - левая кнопка, второй - правая.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetMousePos(x, y)</div>
+            <div class="method-params">Параметры: x (number), y (number) - новые координаты</div>
+            <div class="method-desc">
+                Устанавливает позицию курсора мыши в указанные координаты.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetMouseVisable(visible)</div>
+            <div class="method-params">Параметры: visible (boolean) - видимость курсора</div>
+            <div class="method-desc">
+                Управляет видимостью курсора мыши. Принимает true для показа и false для скрытия.
+            </div>
+        </div>
+    </div>
+    
+    <div class="class-container">
+        <h2>Engine</h2>
+        <p>Основные функции движка</p>
+        
+        <div class="method">
+            <div class="method-name">setOS(os)</div>
+            <div class="method-params">Параметры: os (string) - "Win" или "Web"</div>
+            <div class="method-desc">
+                Устанавливает целевую операционную систему для разработки игры.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">WindowSize()</div>
+            <div class="method-return">Возвращает: [number, number] - размер окна [ширина, высота]</div>
+            <div class="method-desc">
+                Возвращает текущий размер игрового окна.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">Quit()</div>
+            <div class="method-desc">
+                Завершает работу приложения.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">System(text)</div>
+            <div class="method-params">Параметры: text (string) - системный текст</div>
+            <div class="method-desc">
+                Устанавливает системный текст (назначение зависит от реализации).
+            </div>
+        </div>
+    </div>
+    
+    <div class="class-container">
+        <h2>Camera</h2>
+        <p>Управление камерой</p>
+        
+        <div class="method">
+            <div class="method-name">SetCameraPos([x, y, z])</div>
+            <div class="method-params">Параметры: [x, y, z] (number[]) - новая позиция</div>
+            <div class="method-desc">
+                Устанавливает позицию камеры в 3D пространстве.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetCameraRotate([x, y, z])</div>
+            <div class="method-params">Параметры: [x, y, z] (number[]) - новые углы вращения</div>
+            <div class="method-desc">
+                Устанавливает вращение камеры по осям X, Y, Z.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">GetCameraPos()</div>
+            <div class="method-return">Возвращает: [number, number, number] - позиция камеры [x, y, z]</div>
+            <div class="method-desc">
+                Возвращает текущую позицию камеры.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">GetCameraRotate()</div>
+            <div class="method-return">Возвращает: [number, number, number] - вращение камеры [x, y, z]</div>
+            <div class="method-desc">
+                Возвращает текущее вращение камеры.
+            </div>
+        </div>
+    </div>
+    
+    <div class="class-container">
+        <h2>Time</h2>
+        <p>Работа со временем</p>
+        
+        <div class="method">
+            <div class="method-name">Time()</div>
+            <div class="method-return">Возвращает: number - текущее время</div>
+            <div class="method-desc">
+                Возвращает текущее время игры (в секундах).
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">DeltaTime()</div>
+            <div class="method-return">Возвращает: number - время между кадрами</div>
+            <div class="method-desc">
+                Возвращает время, прошедшее между последним и текущим кадром (в секундах). Полезно для плавной анимации.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">FPS()</div>
+            <div class="method-return">Возвращает: number - текущий FPS</div>
+            <div class="method-desc">
+                Возвращает текущее количество кадров в секунду.
+            </div>
+        </div>
+    </div>
+    
+    <div class="class-container">
+        <h2>VariableSystem</h2>
+        <p>Система работы с игровыми объектами</p>
+        
+        <div class="method">
+            <div class="method-name">RenderObjects()</div>
+            <div class="method-desc">
+                Очищает списки объектов и текстов для рендеринга.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">NewSprite(textureEnumerate, position, scale, rotate)</div>
+            <div class="method-params">Параметры: 
+                textureEnumerate (number), 
+                position ([x, y, z]), 
+                scale ([x, y, z]), 
+                rotate ([x, y, z])
+            </div>
+            <div class="method-desc">
+                Создает новый спрайт для рендеринга.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">NewText(mytext, position, scale, color, idfont)</div>
+            <div class="method-params">Параметры: 
+                mytext (string), 
+                position ([x, y, z]), 
+                scale (number), 
+                color (string), 
+                idfont (number)
+            </div>
+            <div class="method-desc">
+                Создает новый текст для рендеринга.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">NewMesh(vertices, indices, normals, tex_coords)</div>
+            <div class="method-params">Параметры: 
+                vertices (number[]), 
+                indices (number[]), 
+                normals (number[]), 
+                tex_coords (number[])
+            </div>
+            <div class="method-desc">
+                Создает новую полигональную модель для рендеринга.
+            </div>
+        </div>
+    </div>
+    
+    <div class="class-container">
+        <h2>Component</h2>
+        <p>Компонентная система для игровых объектов</p>
+        
+        <div class="method">
+            <div class="method-name">ClearScene()</div>
+            <div class="method-desc">
+                Очищает текущую сцену от всех объектов.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetScene(scenename)</div>
+            <div class="method-params">Параметры: scenename (string)</div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Устанавливает текущую активную сцену.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">GetScene()</div>
+            <div class="method-return">Возвращает: string - имя текущей сцены</div>
+            <div class="method-desc">
+                Возвращает имя текущей активной сцены.
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">CreateGameObject(name)</div>
+            <div class="method-params">Параметры: name (string)</div>
+            <div class="method-return">Возвращает: string - ID созданного объекта</div>
+            <div class="method-desc">
+                Создает новый игровой объект с указанным именем и возвращает его идентификатор.
+            </div>
+        </div>
+        
+        <!-- Остальные методы Component... -->
+    </div>
+    
+    <div class="class-container">
+        <h2>Keys</h2>
+        <p>Константы для клавиш клавиатуры</p>
+        <pre><code>Keys = {
+    q: "q", w: "w", e: "e", r: "r", t: "t", y: "y", u: "u", i: "o", p: "p",
+    a: "a", s: "s", d: "d", f: "f", g: "g", h: "h", j: "j", k: "k", l: "l",
+    z: "z", x: "x", c: "c", v: "v", b: "b", n: "n", m: "m",
+    f1: "f1", f2: "f2", f3: "f3", f4: "f4", f5: "f5", f6: "f6",
+    f7: "f7", f8: "f8", f9: "f9", f10: "f10", f11: "f11", f12: "f12",
+    space: "space", esc: "esc", rshift: "rshift", lshift: "lshift",
+    up: "up", down: "down", right: "right", left: "left"
+};</code></pre>
+    </div>
+</body>
 </html>
