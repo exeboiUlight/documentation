@@ -653,10 +653,14 @@
             </div>
             <pre><code>
 a = [0, 0, 0];
+speed = 0.05;
 
 function update() {
     RenderEngine.RenderObjects();
-    RenderEngine.NewModel(0, [0, 0, 0], [1, 1, 1], a, [255, 255, 255]);
+    RenderEngine.NewSprite("icon.png", [0, 0, -5], [1, 1, 1], a);
+    a[0] += speed;
+    a[1] += speed;
+    a[2] += speed;
 }
             </code></pre>
         </div>
