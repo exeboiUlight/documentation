@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>ULight Engine - Документация API</title>
+    <title>ULight Engine - Полная документация API</title>
     <link rel="icon" href="light.ico" type="image/x-icon" />
     <style>
         body {
@@ -86,7 +86,7 @@
     <h1>ULight Engine API Documentation</h1>
     
     <div class="class-container">
-        <h2>InputEngine</h2>
+        <h2>InputSystem</h2>
         <p>Класс для работы с вводом (клавиатура и мышь)</p>
         
         <div class="method">
@@ -95,8 +95,14 @@
             <div class="method-return">Возвращает: boolean - состояние клавиши (нажата/не нажата)</div>
             <div class="method-desc">
                 Проверяет состояние указанной клавиши. Возвращает true, если клавиша нажата, и false в противном случае.
-                <pre><code>if (InputEngine.Keys(Keys.space)) {
-    // Действие при нажатии пробела
+                <pre><code>// Пример: Проверка нажатия клавиши W для движения вперед
+if (InputSystem.Keys(Keys.W)) {
+    player.MoveForward(Time.DeltaTime());
+}
+
+// Пример: Комбинация клавиш Shift + Space
+if (InputSystem.Keys(Keys.SPACE) && InputSystem.Keys(Keys.LSHIFT)) {
+    player.Jump();
 }</code></pre>
             </div>
         </div>
@@ -105,7 +111,22 @@
             <div class="method-name">MousePos()</div>
             <div class="method-return">Возвращает: [number, number] - позиция мыши [x, y]</div>
             <div class="method-desc">
-                Возвращает текущую позицию курсора мыши в виде массива [x, y].
+                Возвращает текущую позицию курсора мыши в виде массива [x, y]. Координата Y инвертирована (увеличивается сверху вниз).
+                <pre><code>// Пример: Получение позиции мыши и отображение в тексте
+let mousePos = InputSystem.MousePos();
+VariableSystem.NewText(
+    `Mouse: ${mousePos[0].toFixed(0)}, ${mousePos[1].toFixed(0)}`, 
+    [0, 0, -5], 
+    0.5, 
+    [255, 255, 255], 
+    0
+);
+
+// Пример: Использование позиции мыши для цели
+function update() {
+    let pos = InputSystem.MousePos();
+    crosshair.SetPosition(pos[0], pos[1], 0);
+}</code></pre>
             </div>
         </div>
         
@@ -114,6 +135,25 @@
             <div class="method-return">Возвращает: [boolean, boolean] - состояния кнопок [ЛКМ, ПКМ]</div>
             <div class="method-desc">
                 Возвращает состояния кнопок мыши: первый элемент массива - левая кнопка, второй - правая.
+                <pre><code>// Пример: Обработка кликов мыши
+let clicks = InputSystem.MouseClick();
+
+if (clicks[0]) { // ЛКМ
+    player.Shoot();
+}
+
+if (clicks[1]) { // ПКМ
+    player.Aim();
+}
+
+// Пример: Проверка двойного клика
+let lastClickTime = 0;
+if (clicks[0] && Time.Time() - lastClickTime < 0.3) {
+    player.DoubleClickAction();
+    lastClickTime = 0;
+} else if (clicks[0]) {
+    lastClickTime = Time.Time();
+}</code></pre>
             </div>
         </div>
         
@@ -121,15 +161,32 @@
             <div class="method-name">SetMousePos(x, y)</div>
             <div class="method-params">Параметры: x (number), y (number) - новые координаты</div>
             <div class="method-desc">
-                Устанавливает позицию курсора мыши в указанные координаты.
+                Устанавливает позицию курсора мыши в указанные координаты. Полезно для фиксации курсора в центре экрана в FPS-играх.
+                <pre><code>// Пример: Фиксация мыши в центре экрана
+let windowSize = Engine.WindowSize();
+InputSystem.SetMousePos(windowSize[0]/2, windowSize[1]/2);
+
+// Пример: Перемещение мыши к определенному UI-элементу
+function showTutorial() {
+    InputSystem.SetMousePos(buttonPosX, buttonPosY);
+}</code></pre>
             </div>
         </div>
         
         <div class="method">
-            <div class="method-name">SetMouseVisable(visible)</div>
+            <div class="method-name">SetMouseVisible(visible)</div>
             <div class="method-params">Параметры: visible (boolean) - видимость курсора</div>
             <div class="method-desc">
                 Управляет видимостью курсора мыши. Принимает true для показа и false для скрытия.
+                <pre><code>// Пример: Скрытие курсора в игровом режиме
+function startGame() {
+    InputSystem.SetMouseVisible(false);
+}
+
+// Пример: Показ курсора в меню
+function showMenu() {
+    InputSystem.SetMouseVisible(true);
+}</code></pre>
             </div>
         </div>
     </div>
@@ -139,10 +196,10 @@
         <p>Основные функции движка</p>
         
         <div class="method">
-            <div class="method-name">setOS(os)</div>
+            <div class="method-name">SetOS(os)</div>
             <div class="method-params">Параметры: os (string) - "Win" или "Web"</div>
             <div class="method-desc">
-                Устанавливает целевую операционную систему для разработки игры.
+                Устанавливает целевую операционную систему для разработки игры. Это влияет на оптимизацию и доступные функции.
             </div>
         </div>
         
@@ -150,22 +207,47 @@
             <div class="method-name">WindowSize()</div>
             <div class="method-return">Возвращает: [number, number] - размер окна [ширина, высота]</div>
             <div class="method-desc">
-                Возвращает текущий размер игрового окна.
+                Возвращает текущий размер игрового окна. Полезно для адаптивного интерфейса.
+                <pre><code>// Пример: Центрирование объекта
+let size = Engine.WindowSize();
+let centerX = size[0] / 2;
+let centerY = size[1] / 2;
+title.SetPosition(centerX, centerY, 0);
+
+// Пример: Проверка соотношения сторон
+function isWidescreen() {
+    let size = Engine.WindowSize();
+    return size[0] / size[1] > 1.7;
+}</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">Quit()</div>
             <div class="method-desc">
-                Завершает работу приложения.
+                Завершает работу приложения. В веб-версии может закрыть вкладку или показать сообщение.
+                <pre><code>// Пример: Выход из игры при нажатии ESC
+function update() {
+    if (InputSystem.Keys(Keys.ESCAPE)) {
+        Engine.Quit();
+    }
+}
+
+// Пример: Кнопка выхода в меню
+exitButton.onClick = function() {
+    Engine.Quit();
+};</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">System(text)</div>
-            <div class="method-params">Параметры: text (string) - системный текст</div>
+            <div class="method-params">Параметры: text (string) - команда для вашей os</div>
             <div class="method-desc">
-                Устанавливает системный текст (назначение зависит от реализации).
+                Устанавливает системный текст. В зависимости от платформы может использоваться для заголовка окна, уведомления и т.д.
+                <pre><code>// Пример: Установка заголовка окна
+Engine.System("@echo off");
+}</code></pre>
             </div>
         </div>
     </div>
@@ -178,7 +260,12 @@
             <div class="method-name">SetCameraPos([x, y, z])</div>
             <div class="method-params">Параметры: [x, y, z] (number[]) - новая позиция</div>
             <div class="method-desc">
-                Устанавливает позицию камеры в 3D пространстве.
+                Устанавливает позицию камеры в 3D пространстве. Камера всегда смотрит вдоль оси Z.
+                <pre><code>// Пример: Установка камеры над игроком
+Camera.SetCameraPos([player.x, player.y + 5, player.z + 3]);
+
+// Пример: Камера для 2D платформера
+Camera.SetCameraPos([player.x, player.y, 10]);</code></pre>
             </div>
         </div>
         
@@ -186,7 +273,18 @@
             <div class="method-name">SetCameraRotate([x, y, z])</div>
             <div class="method-params">Параметры: [x, y, z] (number[]) - новые углы вращения</div>
             <div class="method-desc">
-                Устанавливает вращение камеры по осям X, Y, Z.
+                Устанавливает вращение камеры по осям X, Y, Z в градусах.
+                <pre><code>// Пример: Наклон камеры для эффекта "ранен"
+function applyDamageEffect() {
+    Camera.SetCameraRotate([0, 0, 15]);
+    setTimeout(() => Camera.SetCameraRotate([0, 0, 0]), 500);
+}
+
+// Пример: Камера от первого лица
+function updateFPS() {
+    let mouseMove = InputSystem.MousePos();
+    Camera.SetCameraRotate([-mouseMove[1]/10, mouseMove[0]/10, 0]);
+}</code></pre>
             </div>
         </div>
         
@@ -194,7 +292,23 @@
             <div class="method-name">GetCameraPos()</div>
             <div class="method-return">Возвращает: [number, number, number] - позиция камеры [x, y, z]</div>
             <div class="method-desc">
-                Возвращает текущую позицию камеры.
+                Возвращает текущую позицию камеры. Полезно для расчета эффектов или создания объектов относительно камеры.
+                <pre><code>// Пример: Создание эффекта перед камерой
+function createMuzzleFlash() {
+    let camPos = Camera.GetCameraPos();
+    let flash = new ParticleSystem(camPos[0], camPos[1], camPos[2]);
+}
+
+// Пример: Проверка расстояния от камеры до объекта
+function isVisible(object) {
+    let camPos = Camera.GetCameraPos();
+    let dist = Math.sqrt(
+        Math.pow(object.x - camPos[0], 2) +
+        Math.pow(object.y - camPos[1], 2) +
+        Math.pow(object.z - camPos[2], 2)
+    );
+    return dist < renderDistance;
+}</code></pre>
             </div>
         </div>
         
@@ -202,7 +316,25 @@
             <div class="method-name">GetCameraRotate()</div>
             <div class="method-return">Возвращает: [number, number, number] - вращение камеры [x, y, z]</div>
             <div class="method-desc">
-                Возвращает текущее вращение камеры.
+                Возвращает текущее вращение камеры в градусах. Полезно для кастомизации управления.
+                <pre><code>// Пример: Ограничение вертикального вращения камеры
+function updateCamera() {
+    let rotation = Camera.GetCameraRotate();
+    rotation[0] = Math.max(-60, Math.min(60, rotation[0])); // Ограничение по вертикали
+    Camera.SetCameraRotate(rotation);
+}
+
+// Пример: Сглаживание вращения камеры
+let targetRotation = [0, 0, 0];
+function update() {
+    let current = Camera.GetCameraRotate();
+    let smooth = [
+        lerp(current[0], targetRotation[0], 0.1),
+        lerp(current[1], targetRotation[1], 0.1),
+        lerp(current[2], targetRotation[2], 0.1)
+    ];
+    Camera.SetCameraRotate(smooth);
+}</code></pre>
             </div>
         </div>
     </div>
@@ -213,17 +345,47 @@
         
         <div class="method">
             <div class="method-name">Time()</div>
-            <div class="method-return">Возвращает: number - текущее время</div>
+            <div class="method-return">Возвращает: number - текущее время в секундах</div>
             <div class="method-desc">
-                Возвращает текущее время игры (в секундах).
+                Возвращает время с момента запуска игры в секундах. Полезно для таймеров и анимаций.
+                <pre><code>// Пример: Таймер обратного отсчета
+let startTime = Time.Time();
+function update() {
+    let elapsed = Time.Time() - startTime;
+    if (elapsed > 60) {
+        endGame();
+    }
+    timerText.text = `Time: ${60 - Math.floor(elapsed)}`;
+}
+
+// Пример: Мигание объекта
+function update() {
+    let visible = Math.sin(Time.Time() * 5) > 0;
+    warningSign.visible = visible;
+}</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">DeltaTime()</div>
-            <div class="method-return">Возвращает: number - время между кадрами</div>
+            <div class="method-return">Возвращает: number - время между кадрами в секундах</div>
             <div class="method-desc">
-                Возвращает время, прошедшее между последним и текущим кадром (в секундах). Полезно для плавной анимации.
+                Возвращает время, прошедшее между последним и текущим кадром (в секундах). Используйте для плавного движения независимо от FPS.
+                <pre><code>// Пример: Движение с постоянной скоростью
+const SPEED = 5;
+function update() {
+    if (InputSystem.Keys(Keys.W)) {
+        player.MoveForward(SPEED * Time.DeltaTime());
+    }
+}
+
+// Пример: Плавное затухание
+function update() {
+    alpha -= Time.DeltaTime();
+    if (alpha <= 0) {
+        Destroy(this);
+    }
+}</code></pre>
             </div>
         </div>
         
@@ -231,7 +393,18 @@
             <div class="method-name">FPS()</div>
             <div class="method-return">Возвращает: number - текущий FPS</div>
             <div class="method-desc">
-                Возвращает текущее количество кадров в секунду.
+                Возвращает текущее количество кадров в секунду. Полезно для отладки производительности.
+                <pre><code>// Пример: Отображение FPS
+function update() {
+    fpsText.text = `FPS: ${Math.floor(Time.FPS())}`;
+}
+
+// Пример: Динамическое качество графики
+function update() {
+    if (Time.FPS() < 30) {
+        reduceGraphicsQuality();
+    }
+}</code></pre>
             </div>
         </div>
     </div>
@@ -243,47 +416,103 @@
         <div class="method">
             <div class="method-name">RenderObjects()</div>
             <div class="method-desc">
-                Очищает списки объектов и текстов для рендеринга.
+                Очищает списки объектов и текстов для рендеринга. Должен вызываться в начале каждого кадра.
+                <pre><code>// Пример: Основной цикл рендеринга
+function mainLoop() {
+    VariableSystem.RenderObjects();
+    
+    // Рендеринг всех объектов
+    renderGameObjects();
+    renderUI();
+    
+    requestAnimationFrame(mainLoop);
+}
+mainLoop();</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">NewSprite(textureEnumerate, position, scale, rotate)</div>
             <div class="method-params">Параметры: 
-                textureEnumerate (number), 
-                position ([x, y, z]), 
-                scale ([x, y, z]), 
-                rotate ([x, y, z])
+                textureEnumerate (number) - индекс текстуры, 
+                position ([x, y, z]) - позиция в мире, 
+                scale ([x, y, z]) - масштаб, 
+                rotate ([x, y, z]) - вращение в градусах
             </div>
             <div class="method-desc">
-                Создает новый спрайт для рендеринга.
+                Создает новый спрайт для рендеринга в текущем кадре.
+                <pre><code>// Пример: Рендеринг спрайта игрока
+VariableSystem.NewSprite(
+    TEXTURE_PLAYER, 
+    [player.x, player.y, player.z], 
+    [1, 1, 1], 
+    [0, 0, player.rotation]
+);
+
+// Пример: Анимированный спрайт
+let frame = Math.floor(Time.Time() * 10) % 4;
+VariableSystem.NewSprite(
+    TEXTURE_EXPLOSION_START + frame,
+    [explosion.x, explosion.y, explosion.z],
+    [2, 2, 2],
+    [0, 0, 0]
+);</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">NewText(mytext, position, scale, color, idfont)</div>
             <div class="method-params">Параметры: 
-                mytext (string), 
-                position ([x, y, z]), 
-                scale (number), 
-                color (string), 
-                idfont (number)
+                mytext (string) - текст для отображения, 
+                position ([x, y, z]) - позиция в мире, 
+                scale (number) - размер текста, 
+                color ([r, g, b]) - цвет в RGB, 
+                idfont (number) - индекс шрифта
             </div>
             <div class="method-desc">
-                Создает новый текст для рендеринга.
+                Создает новый текст для рендеринга в текущем кадре.
+                <pre><code>// Пример: Отображение счета
+VariableSystem.NewText(
+    `Score: ${player.score}`,
+    [10, 10, 0],
+    0.8,
+    [255, 255, 0],
+    FONT_MAIN
+);
+
+// Пример: 3D текст в мире
+VariableSystem.NewText(
+    "ДОБРО ПОЖАЛОВАТЬ",
+    [0, 5, -10],
+    1.5,
+    [255, 100, 0],
+    FONT_TITLE
+);</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">NewMesh(vertices, indices, normals, tex_coords)</div>
             <div class="method-params">Параметры: 
-                vertices (number[]), 
-                indices (number[]), 
-                normals (number[]), 
-                tex_coords (number[])
+                vertices (number[]) - массив вершин, 
+                indices (number[]) - массив индексов, 
+                normals (number[]) - массив нормалей, 
+                tex_coords (number[]) - текстурные координаты
             </div>
             <div class="method-desc">
-                Создает новую полигональную модель для рендеринга.
+                Создает новую полигональную модель для рендеринга. Для сложных моделей используйте предварительно созданные меши.
+                <pre><code>// Пример: Создание плоскости
+let vertices = [
+    -1, -1, 0,  // лево-низ
+     1, -1, 0,  // право-низ
+     1,  1, 0,  // право-верх
+    -1,  1, 0   // лево-верх
+];
+let indices = [0, 1, 2, 0, 2, 3];
+let normals = [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1];
+let texCoords = [0, 0, 1, 0, 1, 1, 0, 1];
+
+VariableSystem.NewMesh(vertices, indices, normals, texCoords);</code></pre>
             </div>
         </div>
     </div>
@@ -295,16 +524,31 @@
         <div class="method">
             <div class="method-name">ClearScene()</div>
             <div class="method-desc">
-                Очищает текущую сцену от всех объектов.
+                Очищает текущую сцену от всех объектов. Используйте при загрузке новой сцены.
+                <pre><code>// Пример: Загрузка новой сцены
+function loadLevel(levelName) {
+    Component.ClearScene();
+    loadLevelData(levelName);
+    player = createPlayer();
+}</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">SetScene(scenename)</div>
-            <div class="method-params">Параметры: scenename (string)</div>
+            <div class="method-params">Параметры: scenename (string) - имя сцены</div>
             <div class="method-return">Возвращает: boolean - успех операции</div>
             <div class="method-desc">
-                Устанавливает текущую активную сцену.
+                Устанавливает текущую активную сцену. Автоматически вызывает ClearScene().
+                <pre><code>// Пример: Переход между сценами
+function goToMenu() {
+    Component.SetScene("MainMenu");
+}
+
+// Пример: Проверка успешности загрузки
+if (!Component.SetScene("Level2")) {
+    showError("Failed to load Level2");
+}</code></pre>
             </div>
         </div>
         
@@ -313,33 +557,377 @@
             <div class="method-return">Возвращает: string - имя текущей сцены</div>
             <div class="method-desc">
                 Возвращает имя текущей активной сцены.
+                <pre><code>// Пример: Сохранение имени текущей сцены
+let currentScene = Component.GetScene();
+saveGame(currentScene);
+
+// Пример: Проверка сцены
+if (Component.GetScene() === "Battle") {
+    playBattleMusic();
+}</code></pre>
             </div>
         </div>
         
         <div class="method">
             <div class="method-name">CreateGameObject(name)</div>
-            <div class="method-params">Параметры: name (string)</div>
+            <div class="method-params">Параметры: name (string) - имя объекта</div>
             <div class="method-return">Возвращает: string - ID созданного объекта</div>
             <div class="method-desc">
                 Создает новый игровой объект с указанным именем и возвращает его идентификатор.
+                <pre><code>// Пример: Создание игрока
+let playerId = Component.CreateGameObject("Player");
+Component.SetPosition(playerId, 0, 0, 0);
+Component.AddComponent(playerId, "PlayerController");
+
+// Пример: Создание NPC
+function createNPC(type, x, y) {
+    let id = Component.CreateGameObject(type + "_NPC");
+    Component.SetPosition(id, x, y, 0);
+    Component.AddComponent(id, "AI");
+    return id;
+}</code></pre>
             </div>
         </div>
         
-        <!-- Остальные методы Component... -->
+        <div class="method">
+            <div class="method-name">DestroyGameObject(id)</div>
+            <div class="method-params">Параметры: id (string) - ID объекта</div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Уничтожает игровой объект с указанным ID.
+                <pre><code>// Пример: Уничтожение объекта при смерти
+function onEnemyDeath(enemyId) {
+    Component.DestroyGameObject(enemyId);
+    spawnExplosion(enemyPos);
+}
+
+// Пример: Очистка временных объектов
+function clearTempObjects() {
+    for (let id in tempObjects) {
+        Component.DestroyGameObject(id);
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">AddComponent(gameObjectId, componentType)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                componentType (string) - тип компонента
+            </div>
+            <div class="method-return">Возвращает: string - ID созданного компонента</div>
+            <div class="method-desc">
+                Добавляет компонент указанного типа к игровому объекту.
+                <pre><code>// Пример: Добавление компонентов к игроку
+let playerId = Component.CreateGameObject("Player");
+Component.AddComponent(playerId, "Transform");
+Component.AddComponent(playerId, "Rigidbody");
+Component.AddComponent(playerId, "PlayerController");
+
+// Пример: Добавление визуального компонента
+function addSpriteComponent(objId, texture) {
+    let compId = Component.AddComponent(objId, "SpriteRenderer");
+    Component.GetComponent(objId, compId).texture = texture;
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">RenderSprite(gameObjectId, path)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                path (string) - путь к текстуре
+            </div>
+            <div class="method-desc">
+                Рендерит спрайт для указанного объекта с заданной текстурой.
+                <pre><code>// Пример: Рендеринг спрайта объекта
+function renderAll() {
+    for (let id in gameObjects) {
+        let obj = Component._gameObjects[id];
+        if (obj.hasSprite) {
+            Component.RenderSprite(id, obj.spritePath);
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">RenderText(gameObjectId, text, color, idfont)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                text (string) - текст, 
+                color ([r, g, b]) - цвет, 
+                idfont (number) - ID шрифта
+            </div>
+            <div class="method-desc">
+                Рендерит текст для указанного объекта.
+                <pre><code>// Пример: Рендеринг имени NPC
+function renderNames() {
+    for (let id in npcs) {
+        Component.RenderText(
+            id, 
+            npcs[id].name, 
+            [255, 255, 255], 
+            FONT_DEFAULT
+        );
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">RemoveComponent(gameObjectId, componentId)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                componentId (string) - ID компонента
+            </div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Удаляет компонент из игрового объекта.
+                <pre><code>// Пример: Временное отключение компонента
+let playerControllerId = Component.AddComponent(playerId, "PlayerController");
+
+function disableControls() {
+    Component.RemoveComponent(playerId, playerControllerId);
+}
+
+// Пример: Замена компонента
+function upgradeEngine(carId) {
+    Component.RemoveComponent(carId, oldEngineId);
+    Component.AddComponent(carId, "TurboEngine");
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">GetComponent(gameObjectId, componentType)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                componentType (string) - тип компонента
+            </div>
+            <div class="method-return">Возвращает: object|null - найденный компонент или null</div>
+            <div class="method-desc">
+                Возвращает первый компонент указанного типа у игрового объекта.
+                <pre><code>// Пример: Получение компонента для управления
+function update() {
+    let controller = Component.GetComponent(playerId, "PlayerController");
+    if (controller) {
+        controller.update(Time.DeltaTime());
+    }
+}
+
+// Пример: Проверка наличия компонента
+function canJump(objId) {
+    let rigidbody = Component.GetComponent(objId, "Rigidbody");
+    return rigidbody && rigidbody.isGrounded;
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetPosition(gameObjectId, x, y, z)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                x (number), y (number), z (number) - координаты
+            </div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Устанавливает позицию игрового объекта в мировых координатах.
+                <pre><code>// Пример: Установка позиции игрока
+function respawnPlayer() {
+    Component.SetPosition(playerId, spawnPoint.x, spawnPoint.y, spawnPoint.z);
+}
+
+// Пример: Перемещение объекта
+function moveTo(objId, targetPos, speed) {
+    let currentPos = Component._gameObjects[objId].transform.position;
+    let direction = normalize(subtract(targetPos, currentPos));
+    let newPos = add(currentPos, multiply(direction, speed * Time.DeltaTime())));
+    Component.SetPosition(objId, newPos.x, newPos.y, newPos.z);
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetRotation(gameObjectId, x, y, z)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                x (number), y (number), z (number) - углы в градусах
+            </div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Устанавливает вращение игрового объекта по осям X, Y, Z.
+                <pre><code>// Пример: Поворот к цели
+function lookAt(objId, target) {
+    let pos = Component._gameObjects[objId].transform.position;
+    let dx = target.x - pos.x;
+    let dy = target.y - pos.y;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    Component.SetRotation(objId, 0, 0, angle);
+}
+
+// Пример: Наклон при движении
+function updateCarTilt(carId, speed) {
+    let tilt = speed * 2;
+    Component.SetRotation(carId, tilt, 0, 0);
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetScale(gameObjectId, x, y, z)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                x (number), y (number), z (number) - масштаб по осям
+            </div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Устанавливает масштаб игрового объекта по осям X, Y, Z.
+                <pre><code>// Пример: Увеличение при подборе бонуса
+function applyPowerUp(objId) {
+    Component.SetScale(objId, 1.5, 1.5, 1.5);
+    setTimeout(() => {
+        Component.SetScale(objId, 1, 1, 1);
+    }, 5000);
+}
+
+// Пример: Пульсация объекта
+function update() {
+    let scale = 1 + Math.sin(Time.Time() * 3) * 0.1;
+    Component.SetScale(pulseId, scale, scale, scale);
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">SetActive(gameObjectId, active)</div>
+            <div class="method-params">Параметры: 
+                gameObjectId (string) - ID объекта, 
+                active (boolean) - активность объекта
+            </div>
+            <div class="method-return">Возвращает: boolean - успех операции</div>
+            <div class="method-desc">
+                Включает или выключает игровой объект. Неактивные объекты не обновляются и не рендерятся.
+                <pre><code>// Пример: Временное скрытие объекта
+function hideObject(objId, duration) {
+    Component.SetActive(objId, false);
+    setTimeout(() => Component.SetActive(objId, true), duration);
+}
+
+// Пример: Управление видимостью UI
+function toggleMenu(show) {
+    Component.SetActive(menuId, show);
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">Find(name)</div>
+            <div class="method-params">Параметры: name (string) - имя объекта</div>
+            <div class="method-return">Возвращает: string|null - ID объекта или null</div>
+            <div class="method-desc">
+                Находит игровой объект по имени и возвращает его ID.
+                <pre><code>// Пример: Поиск главного персонажа
+let playerId = Component.Find("Player");
+if (!playerId) {
+    console.error("Player not found!");
+}
+
+// Пример: Поиск всех врагов
+function getAllEnemies() {
+    let enemies = [];
+    for (let i = 0; ; i++) {
+        let id = Component.Find(`Enemy_${i}`);
+        if (!id) break;
+        enemies.push(id);
+    }
+    return enemies;
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">Instantiate(originalId, position, rotation)</div>
+            <div class="method-params">Параметры: 
+                originalId (string) - ID оригинала, 
+                position ({x, y, z}) - позиция, 
+                rotation ({x, y, z}) - вращение
+            </div>
+            <div class="method-return">Возвращает: string|null - ID нового объекта или null</div>
+            <div class="method-desc">
+                Создает копию игрового объекта с сохранением всех компонентов.
+                <pre><code>// Пример: Создание пуль
+function fireBullet() {
+    let bulletId = Component.Instantiate(
+        bulletPrefabId,
+        {x: player.x, y: player.y, z: player.z},
+        {x: 0, y: 0, z: player.rotation}
+    );
+    Component.GetComponent(bulletId, "Bullet").speed = 10;
+}
+
+// Пример: Массовое создание объектов
+function spawnEnemyWave(count) {
+    for (let i = 0; i < count; i++) {
+        let x = Math.random() * 20 - 10;
+        let y = Math.random() * 20 - 10;
+        Component.Instantiate(
+            enemyPrefabId,
+            {x, y, z: 0},
+            {x: 0, y: 0, z: 0}
+        );
+    }
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="method">
+            <div class="method-name">Update()</div>
+            <div class="method-desc">
+                Обновляет все активные компоненты всех активных игровых объектов. Должен вызываться каждый кадр.
+                <pre><code>// Пример: Основной игровой цикл
+function gameLoop() {
+    processInput();
+    Component.Update();
+    render();
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();</code></pre>
+            </div>
+        </div>
     </div>
     
     <div class="class-container">
         <h2>Keys</h2>
         <p>Константы для клавиш клавиатуры</p>
-        <pre><code>Keys = {
-    q: "q", w: "w", e: "e", r: "r", t: "t", y: "y", u: "u", i: "o", p: "p",
-    a: "a", s: "s", d: "d", f: "f", g: "g", h: "h", j: "j", k: "k", l: "l",
-    z: "z", x: "x", c: "c", v: "v", b: "b", n: "n", m: "m",
-    f1: "f1", f2: "f2", f3: "f3", f4: "f4", f5: "f5", f6: "f6",
-    f7: "f7", f8: "f8", f9: "f9", f10: "f10", f11: "f11", f12: "f12",
-    space: "space", esc: "esc", rshift: "rshift", lshift: "lshift",
-    up: "up", down: "down", right: "right", left: "left"
+        <div class="method-desc">
+            Содержит все поддерживаемые клавиши клавиатуры для использования с InputSystem.Keys().
+            <pre><code>// Пример: Проверка различных клавиш
+if (InputSystem.Keys(Keys.SPACE)) {
+    // Пробел нажат
+}
+
+if (InputSystem.Keys(Keys.ESCAPE)) {
+    // ESC нажата
+}
+
+if (InputSystem.Keys(Keys.F1)) {
+    // F1 нажата
+}
+
+// Полный список доступных клавиш:
+Keys = {
+    Q: "q", W: "w", E: "e", R: "r", T: "t", Y: "y", U: "u", I: "I", O: "o", P: "p",
+    A: "a", S: "s", D: "d", F: "f", G: "g", H: "h", J: "j", K: "k", L: "l",
+    Z: "z", X: "x", C: "c", V: "v", B: "b", N: "n", M: "m",
+    F1: "f1", F2: "f2", F3: "f3", F4: "f4", F5: "f5", F6: "f6",
+    F7: "f7", F8: "f8", F9: "f9", F10: "f10", F11: "f11", F12: "f12",
+    SPACE: "space", ESCAPE: "esc", RCLICK: "rshift", LCLICK: "lshift",
+    UP: "up", DOWN: "down", RIGHT: "right", LEFT: "left"
 };</code></pre>
+        </div>
     </div>
 </body>
 </html>
