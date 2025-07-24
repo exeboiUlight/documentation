@@ -7,27 +7,45 @@
     <title>Ulight Game Engine - Создавайте игры легко</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <link rel="icon" href="light.ico" type="image/x-icon" />
     
     <style>
         :root {
             --primary: #6366F1;
             --primary-dark: #4F46E5;
+            --primary-light: #818CF8;
             --secondary: #8B5CF6;
             --accent: #EC4899;
+            --accent-light: #F472B6;
             --background: #0F172A;
+            --background-light: #1E293B;
             --surface: #1E293B;
             --surface-light: #334155;
+            --surface-dark: #0F172A;
             --text: #F1F5F9;
             --text-secondary: #CBD5E1;
+            --text-tertiary: #94A3B8;
             --success: #10B981;
             --warning: #F59E0B;
             --error: #EF4444;
+            
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            --gradient-horizontal: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.25);
+            --shadow-primary: 0 10px 30px rgba(99, 102, 241, 0.3);
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -42,6 +60,131 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--primary);
+        }
+
+        /* Utility Classes */
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section {
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-horizontal);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--surface-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            z-index: -1;
+            transition: var(--transition-slow);
+        }
+
+        .btn:hover::after {
+            transform: scale(1.1);
+            opacity: 0.8;
         }
 
         /* Header */
@@ -51,27 +194,42 @@
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--surface);
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background: rgba(15, 23, 42, 0.98);
+            box-shadow: var(--shadow-lg);
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 1rem 0;
+            height: 80px;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: inline-block;
         }
 
         .nav-links {
@@ -83,12 +241,28 @@
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s ease;
             font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-horizontal);
+            transition: var(--transition);
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--text);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-actions {
@@ -97,94 +271,46 @@
             align-items: center;
         }
 
-        .language-switch {
-            display: flex;
-            gap: 0.5rem;
-            background: var(--surface);
-            padding: 0.25rem;
-            border-radius: 0.5rem;
-        }
-
-        .language-switch button {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-radius: 0.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .language-switch button.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--surface);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            background: var(--surface-light);
-            box-shadow: 0 10px 30px rgba(30, 41, 59, 0.5);
-        }
-
         /* Hero Section */
         .hero {
-            margin-top: 80px;
-            padding: 5rem 5%;
-            min-height: 90vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            background: radial-gradient(ellipse at top, var(--surface) 0%, var(--background) 50%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(30, 41, 59, 0.5) 0%, transparent 70%);
+            z-index: 1;
         }
 
         .hero-content {
-            max-width: 1400px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .hero-text h1 {
             font-size: 3.5rem;
-            font-weight: 700;
             margin-bottom: 1.5rem;
             line-height: 1.2;
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
         .hero-text p {
             font-size: 1.25rem;
-            color: var(--text-secondary);
             margin-bottom: 2rem;
+            max-width: 90%;
         }
 
         .hero-buttons {
@@ -195,75 +321,128 @@
 
         .hero-image {
             position: relative;
+            perspective: 1000px;
         }
 
         .hero-image img {
             width: 100%;
             border-radius: 1rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-xl);
+            transform: rotateY(15deg) rotateX(5deg);
+            transition: var(--transition-slow);
+        }
+
+        .hero-image:hover img {
+            transform: rotateY(0) rotateX(0);
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
         }
 
         /* Features Section */
         .features {
-            padding: 5rem 5% 5rem;
+            position: relative;
             background: var(--surface);
-            /* Добавьте это: */
-            padding-top: calc(5rem + 80px);
-            margin-top: -80px; /* Компенсируем отрицательным margin */
+            padding-top: 80px;
+            margin-top: -80px;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, var(--background), transparent);
+            z-index: 2;
         }
 
         .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .feature-card {
             background: var(--background);
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             border-radius: 1rem;
             border: 1px solid var(--surface-light);
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.1;
         }
 
         .feature-icon {
             font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .feature-card h3 {
             font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
+            margin-bottom: 1rem;
         }
 
         /* Quick Start Section */
         .quickstart {
-            padding: 5rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
+            position: relative;
         }
 
         .quickstart-content {
@@ -273,52 +452,76 @@
             align-items: start;
         }
 
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
         .step {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
+            padding: 2rem;
             background: var(--surface);
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .step h3 {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .step-number {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 2rem;
-            height: 2rem;
-            background: var(--primary);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--gradient);
             color: white;
             border-radius: 50%;
-            font-weight: 600;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
         /* Hotkeys Table */
         .hotkeys-table {
             background: var(--surface);
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .hotkeys-table:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
         .hotkeys-table h3 {
             padding: 1.5rem;
             background: var(--surface-light);
             border-bottom: 1px solid var(--background);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .hotkey-item {
             display: flex;
             justify-content: space-between;
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.5rem;
             border-bottom: 1px solid var(--background);
-            transition: background 0.3s ease;
+            transition: var(--transition);
         }
 
         .hotkey-item:hover {
@@ -332,15 +535,28 @@
         .hotkey {
             font-family: 'JetBrains Mono', monospace;
             background: var(--background);
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
             font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* Code Section */
         .code-section {
-            padding: 5rem 5%;
             background: var(--surface);
+            position: relative;
+        }
+
+        .code-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, var(--background), transparent);
+            z-index: 1;
         }
 
         .code-example {
@@ -349,7 +565,14 @@
             background: var(--background);
             border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+        }
+
+        .code-example:hover {
+            transform: translateY(-5px);
         }
 
         .code-header {
@@ -379,75 +602,185 @@
         pre {
             padding: 2rem;
             overflow-x: auto;
+            margin: 0;
         }
 
         code {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.875rem;
             line-height: 1.5;
+            display: block;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: var(--transition-slow);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+            color: white;
+        }
+
+        .gallery-item h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Download Section */
+        .download {
+            text-align: center;
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .download-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--surface-light);
+            transition: var(--transition);
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+        }
+
+        .download-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .download-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
         }
 
         /* Contact Section */
         .contact {
-            padding: 5rem 5%;
             text-align: center;
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--surface), transparent);
+            z-index: 1;
         }
 
         .contact-links {
             display: flex;
             justify-content: center;
             gap: 2rem;
+            flex-wrap: wrap;
             margin-top: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .contact-link {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
+            gap: 1rem;
+            padding: 1.25rem 2rem;
             background: var(--surface);
             color: var(--text);
             text-decoration: none;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
+            border-radius: 1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--surface-light);
         }
 
         .contact-link:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            background: var(--surface-light);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
         }
 
         /* Footer */
         footer {
             background: var(--surface);
-            padding: 3rem 5%;
+            padding: 4rem 0 2rem;
             text-align: center;
-            border-top: 1px solid var(--surface-light);
+            position: relative;
+            z-index: 2;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-            
-            .quickstart-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .contact-links {
-                flex-direction: column;
-            }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--text-tertiary);
+            margin-top: 1rem;
+        }
+
+        .heart {
+            color: var(--accent);
         }
 
         /* Animations */
@@ -462,562 +795,761 @@
             }
         }
 
+        @keyframes floatUp {
+            0% {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate {
+            opacity: 0;
+        }
+
+        .animate.animated {
+            opacity: 1;
+        }
+
         .fade-in {
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .float-up {
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                gap: 2rem;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--background);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: transparent;
+                border: none;
+                color: var(--text);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-text p {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                max-width: 80%;
+                margin: 0 auto;
+            }
+            
+            .quickstart-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-link {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: var(--surface-light);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
         }
     </style>
 </head>
 <body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
     <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo">Ulight Engine</div>
-            <div class="nav-links">
-                <a href="#home">Главная</a>
-                <a href="#features">Возможности</a>
-                <a _blank href="doc.html">Документация</a>
-                <a href="#download">Скачать</a>
-                <a href="#community">Сообщество</a>
-                <a href="#support">Поддержка</a>
-            </div>
-        </nav>
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <span class="logo-icon"></span>
+                    Ulight Engine
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="#home">Главная</a>
+                    <a href="#features">Возможности</a>
+                    <a href="doc.html" target="_blank">Документация</a>
+                    <a href="#download">Скачать</a>
+                    <a href="#gallery">Галерея</a>
+                    <a href="#support">Поддержка</a>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content fade-in">
-            <div class="hero-text">
-                <h1>Создавайте игры с <span class="gradient-text">Ulight Engine</span></h1>
-                <p>Современный игровой движок для разработки 2D и 3D игр с использованием JavaScript. Простой, мощный и бесплатный.</p>
-                <div class="hero-buttons">
-                    <a href="#download" class="btn">
-                        <i class="fas fa-download"></i> Скачать движок
-                    </a>
-                    <a href="doc.html" class="btn btn-secondary">
-                        <i class="fas fa-book"></i> Документация
-                    </a>
+    <section class="hero section" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="animate float-up">Создавайте игры с <span class="gradient-text">Ulight Engine</span></h1>
+                    <p class="animate float-up delay-1">Современный игровой движок для разработки 2D и 3D игр с использованием JavaScript. Простой, мощный и бесплатный.</p>
+                    <div class="hero-buttons animate float-up delay-2">
+                        <a href="#download" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Скачать движок
+                        </a>
+                        <a href="doc.html" target="_blank" class="btn btn-secondary">
+                            <i class="fas fa-book"></i> Документация
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="hero-image">
-                <img src="ulight.png" alt="Ulight Engine Preview">
+                <div class="hero-image animate float-up delay-3">
+                    <img src="ulight.png" alt="Ulight Engine Preview">
+                </div>
             </div>
         </div>
     </section>
-        <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <h2>Почему <span class="gradient-text">Ulight Engine</span>?</h2>
-            <p>Всё необходимое для создания потрясающих игр</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <h3>полная свобода действий</h3>
-                <p>Вы можете делать всё что душе вздумается</p>
+
+    <!-- Features Section -->
+    <section class="features section" id="features">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>Почему <span class="gradient-text">Ulight Engine</span>?</h2>
+                <p>Всё необходимое для создания потрясающих игр</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-code"></i>
+            <div class="features-grid">
+                <div class="feature-card animate fade-in delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Полная свобода действий</h3>
+                    <p>Вы можете делать всё что душе вздумается без ограничений стандартных конструкторов игр</p>
                 </div>
-                <h3>JavaScript API</h3>
-                <p>Используйте знакомый JavaScript для создания игровой логики и механик</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-cube"></i>
+                <div class="feature-card animate fade-in delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>JavaScript API</h3>
+                    <p>Используйте знакомый JavaScript для создания игровой логики и механик с полным доступом к API</p>
                 </div>
-                <h3>Редактор сцен</h3>
-                <p>Интуитивный визуальный редактор для создания и настройки игровых уровней</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-rocket"></i>
+                <div class="feature-card animate fade-in delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>Редактор сцен</h3>
+                    <p>Интуитивный визуальный редактор для создания и настройки игровых уровней с предпросмотром в реальном времени</p>
                 </div>
-                <h3>Быстрый старт</h3>
-                <p>От идеи до прототипа за считанные минуты благодаря простоте использования</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-users"></i>
+                <div class="feature-card animate fade-in delay-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Быстрый старт</h3>
+                    <p>От идеи до прототипа за считанные минуты благодаря простоте использования и готовым шаблонам</p>
                 </div>
-                <h3>Активное сообщество</h3>
-                <p>Получайте помощь, делитесь опытом и находите единомышленников</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon">
-                    <i class="fas fa-sync"></i>
+                <div class="feature-card animate fade-in delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Активное сообщество</h3>
+                    <p>Получайте помощь, делитесь опытом и находите единомышленников в нашем растущем сообществе</p>
                 </div>
-                <h3>Регулярные обновления</h3>
-                <p>Постоянное развитие движка и добавление новых возможностей</p>
+                <div class="feature-card animate fade-in delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <h3>Регулярные обновления</h3>
+                    <p>Постоянное развитие движка и добавление новых возможностей на основе отзывов пользователей</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Quick Start Section -->
-    <section class="quickstart" id="quickstart">
-        <div class="section-header">
-            <h2>Быстрый старт</h2>
-            <p>Начните создавать игры уже сегодня</p>
-        </div>
-        <div class="quickstart-content">
-            <div class="steps">
-                <div class="step fade-in">
-                    <h3>
-                        <span class="step-number">1</span>
-                        Установка движка
-                    </h3>
-                    <p>Скачайте последнюю версию Ulight Engine и установите её на ваш компьютер. Процесс займёт всего несколько минут.</p>
-                </div>
-                <div class="step fade-in">
-                    <h3>
-                        <span class="step-number">2</span>
-                        Создание проекта
-                    </h3>
-                    <p>После установки нажмите "Создать проект" и выберите шаблон для вашей игры.</p>
-                </div>
-                <div class="step fade-in">
-                    <h3>
-                        <span class="step-number">3</span>
-                        Работа в редакторе
-                    </h3>
-                    <p>Используйте визуальный редактор для создания сцен. Перемещайтесь с помощью мыши и клавиш W, A, S, D, Q, E.</p>
-                </div>
-                <div class="step fade-in">
-                    <h3>
-                        <span class="step-number">4</span>
-                        Программирование
-                    </h3>
-                    <p>Пишите игровую логику на JavaScript. Рекомендуем использовать <a href="https://code.visualstudio.com/">Visual Studio Code</a> для удобной разработки.</p>
-                </div>
+    <section class="quickstart section" id="quickstart">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>Быстрый старт</h2>
+                <p>Начните создавать игры уже сегодня</p>
             </div>
-            <div class="hotkeys-table fade-in">
-                <h3><i class="fas fa-keyboard"></i> Горячие клавиши</h3>
-                <div class="hotkey-item">
-                    <span>Тёмная тема</span>
-                    <span class="hotkey">Ctrl + Shift + 1</span>
+            <div class="quickstart-content animate fade-in delay-1">
+                <div class="steps">
+                    <div class="step">
+                        <h3>
+                            <span class="step-number">1</span>
+                            Установка движка
+                        </h3>
+                        <p>Скачайте последнюю версию Ulight Engine и установите её на ваш компьютер. Процесс займёт всего несколько минут.</p>
+                    </div>
+                    <div class="step">
+                        <h3>
+                            <span class="step-number">2</span>
+                            Создание проекта
+                        </h3>
+                        <p>После установки нажмите "Создать проект" и выберите шаблон для вашей игры из доступных вариантов или начните с чистого листа.</p>
+                    </div>
+                    <div class="step">
+                        <h3>
+                            <span class="step-number">3</span>
+                            Работа в редакторе
+                        </h3>
+                        <p>Используйте визуальный редактор для создания сцен. Перемещайтесь с помощью мыши и клавиш W, A, S, D, Q, E. Добавляйте объекты и настраивайте их свойства.</p>
+                    </div>
+                    <div class="step">
+                        <h3>
+                            <span class="step-number">4</span>
+                            Программирование
+                        </h3>
+                        <p>Пишите игровую логику на JavaScript. Рекомендуем использовать <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> для удобной разработки с подсветкой синтаксиса и автодополнением.</p>
+                    </div>
                 </div>
-                <div class="hotkey-item">
-                    <span>Светлая тема</span>
-                    <span class="hotkey">Ctrl + Shift + 2</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Консольная тема</span>
-                    <span class="hotkey">Ctrl + Shift + 3</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Новая сцена</span>
-                    <span class="hotkey">Ctrl + Shift + P</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Добавить модель</span>
-                    <span class="hotkey">Ctrl + Shift + M</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Добавить изображение</span>
-                    <span class="hotkey">Ctrl + Shift + I</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Обновить сцену</span>
-                    <span class="hotkey">F2</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Открыть папку проекта</span>
-                    <span class="hotkey">F3</span>
-                </div>
-                <div class="hotkey-item">
-                    <span>Запустить игру</span>
-                    <span class="hotkey">F5</span>
+                <div class="hotkeys-table">
+                    <h3><i class="fas fa-keyboard"></i> Горячие клавиши</h3>
+                    <div class="hotkey-item">
+                        <span>Тёмная тема</span>
+                        <span class="hotkey">Ctrl + Shift + 1</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Светлая тема</span>
+                        <span class="hotkey">Ctrl + Shift + 2</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Консольная тема</span>
+                        <span class="hotkey">Ctrl + Shift + 3</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Новая сцена</span>
+                        <span class="hotkey">Ctrl + Shift + P</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Добавить модель</span>
+                        <span class="hotkey">Ctrl + Shift + M</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Добавить изображение</span>
+                        <span class="hotkey">Ctrl + Shift + I</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Обновить сцену</span>
+                        <span class="hotkey">F2</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Открыть папку проекта</span>
+                        <span class="hotkey">F3</span>
+                    </div>
+                    <div class="hotkey-item">
+                        <span>Запустить игру</span>
+                        <span class="hotkey">F5</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Code Example Section -->
-    <section class="code-section" id="docs">
-        <div class="section-header">
-            <h2>API Reference</h2>
-            <p>Простой и понятный API для создания игр</p>
-        </div>
-        <div class="code-example fade-in">
-            <div class="code-header">
-                <span>example.js</span>
+    <section class="code-section section" id="docs">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>API Reference</h2>
+                <p>Простой и понятный API для создания игр</p>
             </div>
-            <pre><code>
+            <div class="code-example animate fade-in delay-1">
+                <div class="code-header">
+                    <span>example.js</span>
+                    <div class="code-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                </div>
+                <pre><code class="language-javascript">
+// Простой пример кода на Ulight Engine
 a = [0, 0, 0];
 speed = 0.05;
 
 function update() {
+    // Отрисовка всех объектов
     RenderEngine.RenderObjects();
+    
+    // Создание нового спрайта
     RenderEngine.NewSprite("icon.png", [0, 0, -5], [1, 1, 1], a);
+    
+    // Анимация вращения
     a[0] += speed;
     a[1] += speed;
     a[2] += speed;
+    
+    // Условие для сброса вращения
+    if (a[0] > 360) {
+        a = [0, 0, 0];
+    }
 }
-            </code></pre>
+                </code></pre>
+            </div>
         </div>
     </section>
 
-    <!-- Screenshots Section -->
-    <section class="features" id="screenshots">
-        <div class="section-header">
-            <h2>Галерея</h2>
-            <p>Примеры игр, созданных на Ulight Engine</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <img src="1.PNG" alt="Screenshot 1" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
-                <h3>point and click</h3>
-                <p>
-                    "Jarry man or pizza man" - это игра в жанре Point and click,
-                    в которой мы должны накопить 100000 долоров икупить мега корпорацию
-                </p>
+    <!-- Gallery Section -->
+    <section class="gallery section" id="gallery">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>Галерея</h2>
+                <p>Примеры игр, созданных на Ulight Engine</p>
             </div>
-            <div class="feature-card fade-in">
-                <img src="2.png" alt="Screenshot 2" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
-                <h3>Space war DEMO</h3>
-                <p>Динамичный космический шутер в 2д</p>
-            </div>
-            <div class="feature-card fade-in">
-                <img src="3.PNG" alt="Screenshot 3" style="width: 100%; border-radius: 0.5rem; margin-bottom: 1rem;">
-                <h3>Carting game за 24 часа</h3>
-                <p>Эта игра демонстрирует паралакс фон, генерацию врагов (генерацию писало 2 человека) и тип упровлением игроком.</p>
+            <div class="gallery-grid animate fade-in delay-1">
+                <div class="gallery-item">
+                    <img src="1.PNG" alt="Screenshot 1">
+                    <div class="gallery-item-content">
+                        <h3>Point and Click</h3>
+                        <p>"Jarry man or pizza man" - игра в жанре Point and Click</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="2.png" alt="Screenshot 2">
+                    <div class="gallery-item-content">
+                        <h3>Space War DEMO</h3>
+                        <p>Динамичный космический шутер в 2D</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="3.PNG" alt="Screenshot 3">
+                    <div class="gallery-item-content">
+                        <h3>Carting Game за 24 часа</h3>
+                        <p>Демонстрация параллакс-фона и генерации врагов</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Download Section -->
-    <section class="quickstart" id="download">
-        <div class="section-header">
-            <h2>Скачать Ulight Engine</h2>
-            <p>Выберите версию для вашей операционной системы</p>
-        </div>
-        <div class="features-grid" style="max-width: 800px; margin: 0 auto;">
-            <div class="feature-card fade-in" style="text-align: center;">
-                <div class="feature-icon">
-                    <i class="fab fa-windows"></i>
-                </div>
-                <h3>Windows</h3>
-                <p>Windows 10/11 (64-bit)</p>
-                <a href="https://drive.google.com/file/d/1BD0rtx4HsHTTr9B-d9HYDV-Q7sf7IpcL/view?usp=drive_link" class="btn" download="Ulight game engine hub 2.0.zip" style="margin-top: 1rem;">
-                    <i class="fas fa-download"></i> Скачать v2.1.4
-                </a>
+    <section class="download section" id="download">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>Скачать Ulight Engine</h2>
+                <p>Выберите версию для вашей операционной системы</p>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 3rem;">
-            <p style="color: var(--text-secondary);">
-                <i class="fas fa-info-circle"></i> 
-                Минимальные требования: 1GB RAM, OpenGL 3.0
-            </p>
+            <div class="download-options animate fade-in delay-1">
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fab fa-windows"></i>
+                    </div>
+                    <h3>Windows</h3>
+                    <p>Windows 10/11 (64-bit)</p>
+                    <a href="https://drive.google.com/file/d/1BD0rtx4HsHTTr9B-d9HYDV-Q7sf7IpcL/view?usp=drive_link" class="btn btn-primary" download="Ulight game engine hub 2.0.zip" style="margin-top: 1.5rem;">
+                        <i class="fas fa-download"></i> Скачать v2.1.4
+                    </a>
+                </div>
+            </div>
+            <div class="animate fade-in delay-2" style="text-align: center; margin-top: 3rem;">
+                <p style="color: var(--text-secondary);">
+                    <i class="fas fa-info-circle"></i> 
+                    Минимальные требования: 1GB RAM, OpenGL 3.0, 500MB свободного места
+                </p>
+            </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact" id="support">
-        <div class="section-header">
-            <h2>Свяжитесь с нами</h2>
-            <p>Мы всегда рады помочь и ответить на ваши вопросы</p>
-        </div>
-        <div class="contact-links">
-            <a href="https://discord.gg/gs9bV9wZmk" class="contact-link">
-                <i class="fab fa-discord"></i>
-                <span>Discord сервер</span>
-            </a>
-            <a href="https://exeboiulight.github.io/asset-store-ulight-game-engine/" class="contact-link">
-                <i class="fab fa-github"></i>
-                <span>Asset store</span>
-            </a>
+    <section class="contact section" id="support">
+        <div class="container">
+            <div class="section-header animate fade-in">
+                <h2>Свяжитесь с нами</h2>
+                <p>Мы всегда рады помочь и ответить на ваши вопросы</p>
+            </div>
+            <div class="contact-links">
+                <a href="https://discord.gg/gs9bV9wZmk" target="_blank" class="contact-link animate fade-in delay-1">
+                    <i class="fab fa-discord contact-icon"></i>
+                    <span>Discord сервер</span>
+                </a>
+                <a href="https://exeboiulight.github.io/asset-store-ulight-game-engine/" target="_blank" class="contact-link animate fade-in delay-2">
+                    <i class="fab fa-github contact-icon"></i>
+                    <span>Asset Store</span>
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Ulight Game Engine. Все права защищены.</p>
-        <p style="margin-top: 1rem; color: var(--text-secondary);">
-            Сделано с <span style="color: var(--accent);">❤️</span> для разработчиков игр
-        </p>
+        <div class="container">
+            <div class="footer-links animate fade-in">
+                <a href="#home">Главная</a>
+                <a href="#features">Возможности</a>
+                <a href="doc.html" target="_blank">Документация</a>
+                <a href="#download">Скачать</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#support">Поддержка</a>
+            </div>
+            <p class="copyright animate fade-in delay-1">&copy; <span id="year">2024</span> Ulight Game Engine. Все права защищены.</p>
+            <p class="animate fade-in delay-2" style="margin-top: 1rem; color: var(--text-secondary);">
+                Сделано с <span class="heart">❤️</span> для разработчиков игр
+            </p>
+        </div>
     </footer>
 
     <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Header scroll effect
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            const currentScroll = window.pageYOffset;
+        // Initialize particles
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
             
-            if (currentScroll > 100) {
-                header.style.background = 'rgba(15, 23, 42, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
-            } else {
-                header.style.background = 'rgba(15, 23, 42, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-            
-            lastScroll = currentScroll;
-        });
-
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'all 0.6s ease-out';
-            observer.observe(el);
-        });
-
-        // Language switch
-        document.querySelectorAll('.language-switch button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.language-switch button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                // Здесь можно добавить логику переключения языка
-                const lang = this.textContent;
-                console.log('Switching to language:', lang);
-            });
-        });
-
-        // Download buttons hover effect
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('mouseenter', function(e) {
-                const ripple = document.createElement('span');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-                ripple.style.width = ripple.style.height = '0px';
-                ripple.style.top = '50%';
-                ripple.style.left = '50%';
-                ripple.style.transform = 'translate(-50%, -50%)';
-                ripple.style.animation = 'ripple 0.6s ease-out';
-                this.style.position = 'relative';
-                this.style.overflow = 'hidden';
-                this.appendChild(ripple);
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
                 
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    width: 200px;
-                    height: 200px;
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Mobile menu toggle (for future implementation)
-        function createMobileMenu() {
-            const mobileMenuBtn = document.createElement('button');
-            mobileMenuBtn.className = 'mobile-menu-btn';
-            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            mobileMenuBtn.style.display = 'none';
-            
-            // Add styles for mobile menu button
-            const mobileStyles = document.createElement('style');
-            mobileStyles.textContent = `
-                .mobile-menu-btn {
-                    display: none;
-                    background: transparent;
-                    border: none;
-                    color: var(--text);
-                    font-size: 1.5rem;
-                    cursor: pointer;
-                    padding: 0.5rem;
-                }
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
                 
-                @media (max-width: 768px) {
-                    .mobile-menu-btn {
-                        display: block !important;
-                    }
-                    
-                    .nav-links {
-                        position: fixed;
-                        top: 80px;
-                        left: -100%;
-                        width: 100%;
-                        height: calc(100vh - 80px);
-                        background: var(--background);
-                        flex-direction: column;
-                        padding: 2rem;
-                        transition: left 0.3s ease;
-                    }
-                    
-                    .nav-links.active {
-                        left: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(mobileStyles);
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                // Random color
+                const colors = ['#6366F1', '#8B5CF6', '#EC4899', '#F472B6'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Mobile menu toggle
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
             
-            // Insert mobile menu button
-            const nav = document.querySelector('nav');
-            nav.insertBefore(mobileMenuBtn, nav.querySelector('.nav-actions'));
-            
-            // Toggle mobile menu
             mobileMenuBtn.addEventListener('click', () => {
-                document.querySelector('.nav-links').classList.toggle('active');
-                mobileMenuBtn.innerHTML = document.querySelector('.nav-links').classList.contains('active') 
-                    ? '<i class="fas fa-times"></i>' 
-                    : '<i class="fas fa-bars"></i>';
+                navLinks.classList.toggle('active');
+                
+                if (navLinks.classList.contains('active')) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+            
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                });
             });
         }
         
-        createMobileMenu();
-
-        // Code highlighting simulation
-        const codeElement = document.querySelector('code');
-        if (codeElement) {
-            const codeText = codeElement.textContent;
-            const keywords = ['const', 'new', 'function', 'return', 'if', 'else', 'for', 'while', 'class'];
-            const strings = /"([^"]*)"|'([^']*)'/g;
-            const comments = /\/\/.*$/gm;
-            const numbers = /\b\d+\b/g;
-
-            let highlightedCode = codeText;
-
-            // Highlight keywords
-            keywords.forEach(keyword => {
-                const regex = new RegExp('\\b' + keyword + '\\b', 'g');
-                highlightedCode = highlightedCode.replace(regex, `<span style="color: var(--primary)">${keyword}</span>`);
+        // Smooth scrolling for anchor links
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const target = document.querySelector(targetId);
+                    
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
-
-            // Highlight strings
-            highlightedCode = highlightedCode.replace(strings, '<span style="color: var(--success)">$&</span>');
-
-            // Highlight comments
-            highlightedCode = highlightedCode.replace(comments, '<span style="color: var(--text-secondary)">$&</span>');
-
-            // Highlight numbers
-            highlightedCode = highlightedCode.replace(numbers, '<span style="color: var(--accent)">$&</span>');
-
-            function escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-            // Использование:
-            codeElement.innerHTML = escapeHtml(rawCode);
         }
-
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '1';
+        
+        // Header scroll effect
+        function initHeaderScroll() {
+            const header = document.getElementById('header');
+            let lastScroll = 0;
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    header.classList.add('scrolled');
+                    
+                    if (currentScroll > lastScroll && currentScroll > 200) {
+                        header.style.transform = 'translateY(-100%)';
+                    } else {
+                        header.style.transform = 'translateY(0)';
+                    }
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                lastScroll = currentScroll;
+            });
+        }
+        
+        // Intersection Observer for animations
+        function initAnimations() {
+            const animateElements = document.querySelectorAll('.animate');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            animateElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // Code highlighting
+        function highlightCode() {
+            const codeElement = document.querySelector('code');
+            if (!codeElement) return;
+            
+            const code = codeElement.textContent;
+            
+            // Keywords to highlight
+            const keywords = [
+                'function', 'if', 'else', 'for', 'while', 'return', 
+                'var', 'let', 'const', 'new', 'true', 'false', 'null'
+            ];
+            
+            // Highlight patterns
+            const patterns = [
+                {
+                    regex: /\/\/.*$/gm,
+                    replace: '<span class="comment">$&</span>'
+                },
+                {
+                    regex: new RegExp(`\\b(${keywords.join('|')})\\b`, 'g'),
+                    replace: '<span class="keyword">$1</span>'
+                },
+                {
+                    regex: /(["'])(?:(?=(\\?))\2.)*?\1/g,
+                    replace: '<span class="string">$&</span>'
+                },
+                {
+                    regex: /\b\d+\b/g,
+                    replace: '<span class="number">$&</span>'
+                }
+            ];
+            
+            let highlightedCode = code;
+            
+            patterns.forEach(pattern => {
+                highlightedCode = highlightedCode.replace(pattern.regex, pattern.replace);
+            });
+            
+            codeElement.innerHTML = highlightedCode;
+        }
+        
+        // Set current year in footer
+        function setCurrentYear() {
+            const yearElement = document.getElementById('year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            initMobileMenu();
+            initSmoothScrolling();
+            initHeaderScroll();
+            initAnimations();
+            highlightCode();
+            setCurrentYear();
+            
+            // Show body after everything is initialized
+            document.body.classList.add('loaded');
+            
+            // Console easter egg
+            console.log('%c Добро пожаловать в Ulight Engine! 🎮', 'font-size: 20px; color: #6366F1; font-weight: bold;');
+            console.log('%c Начните создавать потрясающие игры уже сегодня!', 'font-size: 14px; color: #8B5CF6;');
         });
-
+        
         // Parallax effect for hero section
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const hero = document.querySelector('.hero');
             if (hero) {
-                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
             }
         });
-
-        // Dynamic year in footer
-        const yearElement = document.querySelector('footer p');
-        if (yearElement) {
-            const currentYear = new Date().getFullYear();
-            yearElement.innerHTML = yearElement.innerHTML.replace('2024', currentYear);
-        }
-
-        // Initialize tooltips
+        
+        // Tooltip functionality
         function initTooltips() {
             const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            
             tooltipElements.forEach(el => {
-                el.addEventListener('mouseenter', function(e) {
-                    const tooltip = document.createElement('div');
+                let tooltip = null;
+                
+                el.addEventListener('mouseenter', (e) => {
+                    tooltip = document.createElement('div');
                     tooltip.className = 'tooltip';
-                    tooltip.textContent = this.getAttribute('data-tooltip');
-                    tooltip.style.cssText = `
-                        position: absolute;
-                        background: var(--surface-light);
-                        color: var(--text);
-                        padding: 0.5rem 1rem;
-                        border-radius: 0.25rem;
-                        font-size: 0.875rem;
-                        white-space: nowrap;
-                        z-index: 1000;
-                        pointer-events: none;
-                        opacity: 0;
-                        transition: opacity 0.3s ease;
-                    `;
+                    tooltip.textContent = el.getAttribute('data-tooltip');
                     document.body.appendChild(tooltip);
                     
-                    const rect = this.getBoundingClientRect();
-                    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-                    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+                    const rect = el.getBoundingClientRect();
+                    const tooltipWidth = tooltip.offsetWidth;
+                    const tooltipHeight = tooltip.offsetHeight;
                     
-                    setTimeout(() => tooltip.style.opacity = '1', 10);
+                    let top = rect.top - tooltipHeight - 10;
+                    let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
                     
-                    this.addEventListener('mouseleave', function() {
+                    // Adjust if tooltip goes off screen
+                    if (left < 10) left = 10;
+                    if (left + tooltipWidth > window.innerWidth - 10) {
+                        left = window.innerWidth - tooltipWidth - 10;
+                    }
+                    
+                    if (top < 10) {
+                        top = rect.bottom + 10;
+                    }
+                    
+                    tooltip.style.top = `${top + window.scrollY}px`;
+                    tooltip.style.left = `${left}px`;
+                    tooltip.style.opacity = '1';
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    if (tooltip) {
                         tooltip.style.opacity = '0';
-                        setTimeout(() => tooltip.remove(), 300);
-                    }, { once: true });
+                        setTimeout(() => {
+                            if (tooltip && tooltip.parentNode) {
+                                tooltip.parentNode.removeChild(tooltip);
+                            }
+                        }, 300);
+                    }
                 });
             });
         }
-
-        // Performance optimization - lazy loading images
-        const images = document.querySelectorAll('img');
-        const imageOptions = {
-            threshold: 0,
-            rootMargin: '0px 0px 50px 0px'
-        };
-
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.style.opacity = '0';
-                    img.addEventListener('load', () => {
-                        img.style.transition = 'opacity 0.5s ease';
-                        img.style.opacity = '1';
-                    });
-                    observer.unobserve(img);
-                }
-            });
-        }, imageOptions);
-
-        images.forEach(img => imageObserver.observe(img));
-
-        // Console easter egg
-        console.log('%c Welcome to Ulight Engine! 🎮', 'font-size: 20px; color: #6366F1; font-weight: bold;');
-        console.log('%c Start creating amazing games today!', 'font-size: 14px; color: #8B5CF6;');
+        
+        // Initialize tooltips after a small delay
+        setTimeout(initTooltips, 1000);
     </script>
 </body>
 </html>
