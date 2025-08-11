@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULight Engine - Полная документация API</title>
-    <link rel="icon" href="light.ico" type="image/x-icon" />
+    <title>ULight Engine - Полная документация API | Официальный сайт</title>
+    <meta name="description" content="Полная документация по API Ulight Game Engine. Исчерпывающее руководство по всем функциям и методам игрового движка.">
+    <meta name="keywords" content="Ulight Engine документация, API reference, игровой движок, создание игр, JavaScript, руководство разработчика">
+    <meta name="author" content="Ulight Engine Team">
+    <link rel="icon" href="light.ico" type="image/x-icon">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
@@ -14,6 +17,7 @@
     
     <style>
         :root {
+            /* Default Dark Theme */
             --primary: #6366F1;
             --primary-dark: #4F46E5;
             --primary-light: #818CF8;
@@ -45,6 +49,48 @@
             --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Light Theme */
+        [data-theme="light"] {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --primary-light: #6366F1;
+            --secondary: #7C3AED;
+            --accent: #DB2777;
+            --accent-light: #EC4899;
+            --background: #F8FAFC;
+            --background-light: #F1F5F9;
+            --surface: #FFFFFF;
+            --surface-light: #F1F5F9;
+            --surface-dark: #E2E8F0;
+            --text: #1E293B;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --success: #059669;
+            --warning: #D97706;
+            --error: #DC2626;
+        }
+
+        /* Console Theme */
+        [data-theme="console"] {
+            --primary: #00FF41;
+            --primary-dark: #008F11;
+            --primary-light: #00FF41;
+            --secondary: #00FF41;
+            --accent: #00FF41;
+            --accent-light: #00FF41;
+            --background: #0D0208;
+            --background-light: #0D0208;
+            --surface: #003B00;
+            --surface-light: #005500;
+            --surface-dark: #002200;
+            --text: #00FF41;
+            --text-secondary: #008F11;
+            --text-tertiary: #007700;
+            --success: #00FF41;
+            --warning: #00FF41;
+            --error: #00FF41;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -57,6 +103,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background-color 0.5s ease;
         }
 
         /* Header */
@@ -69,6 +116,16 @@
             border-bottom: 1px solid var(--surface-light);
             z-index: 1000;
             transition: var(--transition);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        [data-theme="console"] header {
+            background: rgba(13, 2, 8, 0.95);
+            border-bottom: 1px solid rgba(0, 59, 0, 0.5);
         }
 
         nav {
@@ -112,6 +169,7 @@
             font-weight: 500;
             position: relative;
             padding: 0.5rem 0;
+            transition: var(--transition);
         }
 
         .nav-links a::after {
@@ -127,10 +185,15 @@
 
         .nav-links a:hover {
             color: var(--text);
+            text-decoration: none;
         }
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
         }
 
         .mobile-menu-btn {
@@ -140,6 +203,42 @@
             color: var(--text);
             font-size: 1.5rem;
             cursor: pointer;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .theme-btn {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--surface-light);
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-btn.active {
+            border-color: var(--primary);
+            transform: scale(1.1);
         }
 
         /* Main Content */
@@ -185,6 +284,16 @@
             color: var(--text-secondary);
         }
 
+        a {
+            color: var(--primary-light);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
         /* API Classes */
         .class-container {
             background: var(--surface);
@@ -220,6 +329,7 @@
 
         .method:hover {
             background: var(--surface-dark);
+            transform: translateX(5px);
         }
 
         .method-name {
@@ -274,6 +384,11 @@
             margin: 1.5rem 0;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--surface-light);
+            transition: var(--transition);
+        }
+
+        pre:hover {
+            box-shadow: var(--shadow-lg);
         }
 
         pre code {
@@ -305,6 +420,62 @@
             color: var(--text);
         }
 
+        /* Table of Contents */
+        .toc {
+            position: fixed;
+            top: 100px;
+            left: 2rem;
+            width: 250px;
+            background: var(--surface);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 900;
+        }
+
+        .toc:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0.5rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            background: var(--background);
+            text-decoration: none;
+        }
+
+        .toc a.active {
+            color: var(--primary);
+            font-weight: 600;
+            background: var(--background);
+        }
+
         /* Footer */
         footer {
             background: var(--surface);
@@ -330,6 +501,7 @@
 
         .footer-links a:hover {
             color: var(--primary);
+            text-decoration: none;
         }
 
         .copyright {
@@ -341,6 +513,19 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .toc {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+            
+            .container {
+                padding: 5rem 1rem 2rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
@@ -405,10 +590,17 @@
     </style>
 </head>
 <body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="dark" title="Тёмная тема"><i class="fas fa-moon"></i></button>
+        <button class="theme-btn" data-theme="light" title="Светлая тема"><i class="fas fa-sun"></i></button>
+        <button class="theme-btn" data-theme="console" title="Консольная тема"><i class="fas fa-terminal"></i></button>
+    </div>
+
     <!-- Header -->
     <header id="header">
         <nav>
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <span class="logo-icon"></span>
                 Ulight Engine
             </a>
@@ -425,11 +617,23 @@
         </nav>
     </header>
 
+    <!-- Table of Contents -->
+    <div class="toc animate delay-1">
+        <h3>Содержание</h3>
+        <ul>
+            <li><a href="#inputsystem" class="toc-link">InputSystem</a></li>
+            <li><a href="#engine" class="toc-link">Engine</a></li>
+            <li><a href="#camera" class="toc-link">Camera</a></li>
+            <li><a href="#time" class="toc-link">Time</a></li>
+            <li><a href="#keys" class="toc-link">Keys</a></li>
+        </ul>
+    </div>
+
     <!-- Main Content -->
     <div class="container">
         <h1 class="animate">Ulight Engine API Documentation</h1>
         
-        <div class="class-container animate delay-1">
+        <div class="class-container animate delay-2" id="inputsystem">
             <h2>InputSystem</h2>
             <div class="class-description">
                 <p>Класс для работы с вводом (клавиатура и мышь)</p>
@@ -512,7 +716,7 @@ if (clicks[0] && Time.Time() - lastClickTime < 0.3) {
             </div>
         </div>
         
-        <div class="class-container animate delay-2">
+        <div class="class-container animate delay-3" id="engine">
             <h2>Engine</h2>
             <div class="class-description">
                 <p>Основные функции движка</p>
@@ -568,7 +772,7 @@ exitButton.onClick = function() {
             </div>
         </div>
         
-        <div class="class-container animate delay-3">
+        <div class="class-container animate delay-4" id="camera">
             <h2>Camera</h2>
             <div class="class-description">
                 <p>Управление камерой</p>
@@ -611,7 +815,7 @@ function updateFPS() {
             </div>
         </div>
         
-        <div class="class-container animate delay-4">
+        <div class="class-container animate delay-5" id="time">
             <h2>Time</h2>
             <div class="class-description">
                 <p>Работа со временем</p>
@@ -668,7 +872,7 @@ function update() {
             </div>
         </div>
         
-        <div class="class-container animate delay-5">
+        <div class="class-container" id="keys">
             <h2>Keys</h2>
             <div class="class-description">
                 <p>Константы для клавиш клавиатуры</p>
@@ -761,9 +965,89 @@ Keys = {
             });
         }
         
+        // Table of Contents highlighting
+        function initTOC() {
+            const sections = document.querySelectorAll('.class-container');
+            const links = document.querySelectorAll('.toc-link');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        links.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50% 0px'
+            });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        // Theme switching functionality
+        function initThemeSwitcher() {
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            const savedTheme = localStorage.getItem('ulight-theme') || 'dark';
+            
+            // Set saved theme
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Highlight active button
+            themeButtons.forEach(btn => {
+                if (btn.dataset.theme === savedTheme) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Theme button click handlers
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const theme = btn.dataset.theme;
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('ulight-theme', theme);
+                    
+                    // Update active button
+                    themeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+            
+            // Hotkeys for theme switching
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey) {
+                    if (e.key === '1') {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('ulight-theme', 'dark');
+                        themeButtons.forEach(b => b.classList.remove('active'));
+                        document.querySelector('.theme-btn[data-theme="dark"]').classList.add('active');
+                    } else if (e.key === '2') {
+                        document.documentElement.setAttribute('data-theme', 'light');
+                        localStorage.setItem('ulight-theme', 'light');
+                        themeButtons.forEach(b => b.classList.remove('active'));
+                        document.querySelector('.theme-btn[data-theme="light"]').classList.add('active');
+                    } else if (e.key === '3') {
+                        document.documentElement.setAttribute('data-theme', 'console');
+                        localStorage.setItem('ulight-theme', 'console');
+                        themeButtons.forEach(b => b.classList.remove('active'));
+                        document.querySelector('.theme-btn[data-theme="console"]').classList.add('active');
+                    }
+                }
+            });
+        }
+        
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             highlightCode();
+            initTOC();
+            initThemeSwitcher();
             
             // Animate elements on scroll
             const animateElements = document.querySelectorAll('.animate');
