@@ -246,6 +246,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 6rem 2rem 2rem;
+            transform-origin: top left;
         }
 
         h1, h2, h3, h4 {
@@ -512,6 +513,48 @@
             color: var(--accent);
         }
 
+        /* Draggable and Zoomable Content */
+        .zoom-controls {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--surface);
+            padding: 0.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .zoom-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--surface-light);
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .zoom-btn:hover {
+            background: var(--surface-light);
+            transform: scale(1.05);
+        }
+
+        .zoom-value {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.2rem 0;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .toc {
@@ -563,6 +606,11 @@
             .class-container {
                 padding: 1.5rem;
             }
+
+            .zoom-controls {
+                bottom: 5rem;
+                right: 1rem;
+            }
         }
 
         /* Animations */
@@ -595,6 +643,14 @@
         <button class="theme-btn active" data-theme="dark" title="Тёмная тема"><i class="fas fa-moon"></i></button>
         <button class="theme-btn" data-theme="light" title="Светлая тема"><i class="fas fa-sun"></i></button>
         <button class="theme-btn" data-theme="console" title="Консольная тема"><i class="fas fa-terminal"></i></button>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+        <button class="zoom-btn" id="zoomIn" title="Увеличить"><i class="fas fa-search-plus"></i></button>
+        <div class="zoom-value" id="zoomValue">100%</div>
+        <button class="zoom-btn" id="zoomOut" title="Уменьшить"><i class="fas fa-search-minus"></i></button>
+        <button class="zoom-btn" id="resetZoom" title="Сбросить масштаб"><i class="fas fa-sync-alt"></i></button>
     </div>
 
     <!-- Header -->
@@ -630,7 +686,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="contentContainer">
         <h1 class="animate">Ulight Engine API Documentation</h1>
         
         <div class="class-container animate delay-2" id="inputsystem">
@@ -1042,12 +1098,140 @@ Keys = {
                 }
             });
         }
+
+        // Zoom and Drag functionality
+        function initZoomAndDrag() {
+            const container = document.getElementById('contentContainer');
+            const zoomInBtn = document.getElementById('zoomIn');
+            const zoomOutBtn = document.getElementById('zoomOut');
+            const resetZoomBtn = document.getElementById('resetZoom');
+            const zoomValue = document.getElementById('zoomValue');
+
+            let scale = 1;
+            let isDragging = false;
+            let startPos = { x: 0, y: 0 };
+            let translate = { x: 0, y: 0 };
+
+            // Update transform
+            function updateTransform() {
+                container.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
+                zoomValue.textContent = `${Math.round(scale * 100)}%`;
+            }
+
+            // Zoom in
+            zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale + 0.1, 2);
+                updateTransform();
+            });
+
+            // Zoom out
+            zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale - 0.1, 0.5);
+                updateTransform();
+            });
+
+            // Reset zoom
+            resetZoomBtn.addEventListener('click', () => {
+                scale = 1;
+                translate = { x: 0, y: 0 };
+                updateTransform();
+            });
+
+            // Mouse wheel zoom
+            container.addEventListener('wheel', (e) => {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    const delta = -Math.sign(e.deltaY) * 0.1;
+                    scale = Math.min(Math.max(scale + delta, 0.5), 2);
+                    updateTransform();
+                }
+            }, { passive: false });
+
+            // Drag start
+            container.addEventListener('mousedown', (e) => {
+                if (e.button === 0) { // Left mouse button
+                    isDragging = true;
+                    startPos = { x: e.clientX - translate.x, y: e.clientY - translate.y };
+                    container.style.cursor = 'grabbing';
+                }
+            });
+
+            // Dragging
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    translate.x = e.clientX - startPos.x;
+                    translate.y = e.clientY - startPos.y;
+                    updateTransform();
+                }
+            });
+
+            // Drag end
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                container.style.cursor = 'grab';
+            });
+
+            // Touch events for mobile
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startPos = { 
+                        x: e.touches[0].clientX - translate.x, 
+                        y: e.touches[0].clientY - translate.y 
+                    };
+                    container.style.cursor = 'grabbing';
+                }
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    e.preventDefault();
+                    translate.x = e.touches[0].clientX - startPos.x;
+                    translate.y = e.touches[0].clientY - startPos.y;
+                    updateTransform();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+                container.style.cursor = 'grab';
+            });
+
+            // Pinch zoom for touch devices
+            let initialDistance = 0;
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            });
+
+            container.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const delta = (currentDistance - initialDistance) / 1000;
+                    scale = Math.min(Math.max(scale + delta, 0.5), 2);
+                    initialDistance = currentDistance;
+                    updateTransform();
+                }
+            }, { passive: false });
+
+            // Set initial cursor
+            container.style.cursor = 'grab';
+        }
         
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             highlightCode();
             initTOC();
             initThemeSwitcher();
+            initZoomAndDrag();
             
             // Animate elements on scroll
             const animateElements = document.querySelectorAll('.animate');
